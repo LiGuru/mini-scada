@@ -1,0 +1,33 @@
+name: Build and Release Electron GUI
+
+on:
+  push:
+    tags:
+      - 'v*'    # Стартира само при push на тагове, напр. v1.0.0
+
+jobs:
+  release:
+    name: Build and Release GUI on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./gui
+
+      - name: Build and Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # GitHub auto предоставя този токен
+        run: npm run build
+        working-directory: ./gui
