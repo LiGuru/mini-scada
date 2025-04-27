@@ -21,11 +21,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18  # или твоята версия
+          node-version: 18
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./gui  # ако GUI-то е в ./gui
+        working-directory: ./gui
 
       - name: Build Electron app
         run: npm run build
