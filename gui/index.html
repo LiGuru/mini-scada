@@ -2,37 +2,159 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AIT Executor Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measurement Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f7f7f7; }
-        #log { border: 1px solid black; height: 150px; overflow-y: scroll; background: #000; color: #0f0; padding: 5px; }
-        .device { padding: 5px; margin: 5px 0; border: 1px solid #ccc; background: #fff; }
-        button { padding: 10px 20px; margin-top: 10px; font-size: 16px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header i {
+            font-size: 30px;
+            color: #4CAF50;
+            margin-right: 10px;
+        }
+
+        .card-header h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .status, .result {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .status.ready {
+            color: #4CAF50;
+        }
+
+        .status.failed {
+            color: #F44336;
+        }
+
+        .result.pass {
+            color: #4CAF50;
+        }
+
+        .result.fail {
+            color: #F44336;
+        }
+
+        .label {
+            color: #999;
+            font-weight: normal;
+        }
+
+        .value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .timestamp {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
-<h1>AIT Executor Dashboard</h1>
 
-<div id="auth"><strong>User:</strong> <span id="nfcUser">Not Authenticated</span></div>
-<div id="agentStatus">
-    <strong>Agent:</strong> <span id="agentId">--</span>
-    <strong>Status:</strong> <span id="agentState">--</span>
+<div class="dashboard">
+    <!-- Status Card -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>Agent Status</h3>
+        </div>
+        <div class="card-body">
+            <div class="status ready" id="status">Status: n/a</div>
+            <div class="timestamp"><span class="label">Last Updated:</span> <span id="statusTimestamp" class="value">n/a</span></div>
+        </div>
+    </div>
+
+    <!-- Test Result Card -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            <h3>Test Results</h3>
+        </div>
+        <div class="card-body">
+            <div class="result pass" id="result">Result: n/a</div>
+            <div><span class="label">Agent ID:</span> <span id="agentId" class="value">n/a</span></div>
+            <div><span class="label">Task ID:</span> <span id="taskId" class="value">n/a</span></div>
+            <div><span class="label">Cycle Number:</span> <span id="cycleNumber" class="value">n/a</span></div>
+        </div>
+    </div>
+
+    <!-- Measurement Details Card -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            <h3>Measurement Details</h3>
+        </div>
+        <div class="card-body">
+            <div><span class="label">Temperature:</span> <span id="temperature" class="value">n/a</span></div>
+            <div><span class="label">Current:</span> <span id="current" class="value">n/a</span></div>
+            <div><span class="label">Voltage:</span> <span id="voltage" class="value">n/a</span></div>
+            <div><span class="label">Measured At:</span> <span id="measuredAt" class="value">n/a</span></div>
+        </div>
+    </div>
 </div>
-<div id="guiInfo">
-    <strong>GUI Version:</strong> <span id="guiVersion"></span>
-</div>
-<div id="benchAttributes"></div>
-
-<button id="startBtn">Start Listening</button>
-
-<h2>Devices</h2>
-<div id="devicesPanel"></div>
-
-<h2>Measurements</h2>
-<div id="measurements">Waiting for data...</div>
-
-<h2>Log</h2>
-<div id="log"></div>
 
 <script src="renderer.js"></script>
 </body>
