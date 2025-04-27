@@ -9,8 +9,34 @@
     "dev": "NODE_ENV=development electron .",
     "build": "electron-builder"
   },
+  "build": {
+    "appId": "com.endurosat.mini-scada",
+    "productName": "Mini SCADA",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*"
+    ],
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "publish": {
+      "provider": "github"
+    }
+  },
   "dependencies": {
     "amqplib": "^0.10.3"
+  },
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/nvlahovski-endurosat/mini-scada.git"
   },
   "devDependencies": {
     "electron": "^35.2.1",
