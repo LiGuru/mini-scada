@@ -34,6 +34,10 @@
   "dependencies": {
     "amqplib": "^0.10.3"
   },
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/nvlahovski-endurosat/mini-scada.git"
+  },
   "devDependencies": {
     "electron": "^35.2.1",
     "electron-builder": "^26.0.12"
