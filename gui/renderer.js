@@ -1,69 +1,55 @@
-// GUI Renderer Script (Placeholder)
+// Получаваме API методите от preload.js
 const api = window.electronAPI;
 
-const logBox = document.getElementById('log');
-const measurements = document.getElementById('measurements');
-const statusLine = document.getElementById('agentState');
-const agentId = document.getElementById('agentId');
-const devicesPanel = document.getElementById('devicesPanel');
-const nfcUser = document.getElementById('nfcUser');
-const startBtn = document.getElementById('startBtn');
+// Получаваме DOM елементи, в които ще рендерираме статусите и резултатите
+const statusLine = document.getElementById('status');
+const resultsContainer = document.getElementById('measurementResults');
 
-document.getElementById('guiVersion').innerText = api.version;
+// Функция за обновяване на състоянието на агента
+function updateAgentStatus(status) {
+    console.log('Received agent status:', status);
 
-function log(message) {
-    const timestamp = new Date().toLocaleTimeString();
-    logBox.innerHTML += `[${timestamp}] ${message}<br>`;
-    logBox.scrollTop = logBox.scrollHeight;
+    statusLine.innerText = `Status: ${status.status.charAt(0).toUpperCase() + status.status.slice(1)}`;
+    const statusElement = document.getElementById('status');
+    if (status.status === 'ready') {
+        statusElement.classList.add('ready');
+        statusElement.classList.remove('failed');
+    } else {
+        statusElement.classList.add('failed');
+        statusElement.classList.remove('ready');
+    }
+
+    // Обновяваме времето на последната актуализация
+    document.getElementById('statusTimestamp').innerText = status.timestamp || 'n/a';
 }
 
-let devices = {};
+// Функция за обновяване на резултатите от теста
+function updateTestResults(resultData) {
+    console.log('Received test results:', resultData);
 
-function updateDevicesPanel() {
-    devicesPanel.innerHTML = '';
-    Object.keys(devices).forEach(deviceId => {
-        const dev = devices[deviceId];
-        let color = 'gray';
-        let icon = '⚪️';
-        if (dev.status === 'ready') { color = 'green'; icon = '🟢'; }
-        else if (dev.status === 'busy') { color = 'orange'; icon = '🟠'; }
-        else if (dev.status === 'error') { color = 'red'; icon = '🔴'; }
+    document.getElementById('result').innerText = `Result: ${resultData.result.charAt(0).toUpperCase() + resultData.result.slice(1)}`;
+    document.getElementById('agentId').innerText = resultData.agent_id || 'n/a';
+    document.getElementById('taskId').innerText = resultData.task_id || 'n/a';
+    document.getElementById('cycleNumber').innerText = resultData.cycle_number || 'n/a';
 
-        const html = `<div class="device" style="color:${color}">${icon} <strong>${deviceId}</strong> — ${dev.details}</div>`;
-        devicesPanel.innerHTML += html;
-    });
+    const resultElement = document.getElementById('result');
+    if (resultData.result === 'pass') {
+        resultElement.classList.add('pass');
+        resultElement.classList.remove('fail');
+    } else {
+        resultElement.classList.add('fail');
+        resultElement.classList.remove('pass');
+    }
+
+    // Обновяване на измерванията
+    document.getElementById('temperature').innerText = resultData.details.temperature ? `${resultData.details.temperature}°C` : 'n/a';
+    document.getElementById('current').innerText = resultData.details.current ? `${resultData.details.current} A` : 'n/a';
+    document.getElementById('voltage').innerText = resultData.details.voltage ? `${resultData.details.voltage} V` : 'n/a';
+    document.getElementById('measuredAt').innerText = resultData.details.measured_at || 'n/a';
 }
 
-startBtn.addEventListener('click', () => {
-    api.startListening();
-    log('Started listening for RabbitMQ updates...');
-});
+// Слушаме за събитие 'gui_status' от main процеса чрез preload
+api.onStatus(updateAgentStatus);
 
-api.onStatus((status) => {
-    agentId.innerText = status.agent_id || 'unknown';
-    statusLine.innerText = status.status || '--';
-    log(`Agent Status: ${JSON.stringify(status)}`);
-});
-
-api.onMeasurement((result) => {
-    measurements.innerText = `Voltage: ${result.details.voltage} V, Current: ${result.details.current} A, Temp: ${result.details.temperature} °C`;
-    log(`Measurement: ${JSON.stringify(result)}`);
-});
-
-api.onDeviceStatus((device) => {
-    devices[device.device_id] = {
-        status: device.status,
-        details: device.details
-    };
-    updateDevicesPanel();
-});
-
-api.onBenchStatus((bench) => {
-    document.getElementById('benchAttributes').innerText =
-        `Bench ID: ${bench.bench_id}, Location: ${bench.location}, Connected: ${bench.connected_devices.join(', ')}`;
-});
-
-api.onNFCAuth((userData) => {
-    nfcUser.innerText = `${userData.name} (ID: ${userData.id})`;
-    log(`User authenticated via NFC: ${userData.name}`);
-});
+// Слушаме за събитие 'gui_results' от main процеса чрез preload
+api.onMeasurement(updateTestResults);
