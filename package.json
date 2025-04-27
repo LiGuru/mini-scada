@@ -1,8 +1,14 @@
 {
-  "name": "mini-scada-desktop",
-  "version": "0.1.0",
+  "name": "ait-electron-gui",
+  "version": "0.4.2",
+  "description": "AIT Test Bench GUI",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "NODE_ENV=production electron .",
+    "dev": "NODE_ENV=development electron ."
+  },
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "electron": "^35.2.1"
   }
 }

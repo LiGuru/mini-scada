@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AIT Executor Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f7f7f7; }
+        #log { border: 1px solid black; height: 150px; overflow-y: scroll; background: #000; color: #0f0; padding: 5px; }
+        .device { padding: 5px; margin: 5px 0; border: 1px solid #ccc; background: #fff; }
+        button { padding: 10px 20px; margin-top: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+<h1>AIT Executor Dashboard</h1>
+
+<div id="auth"><strong>User:</strong> <span id="nfcUser">Not Authenticated</span></div>
+<div id="agentStatus">
+    <strong>Agent:</strong> <span id="agentId">--</span>
+    <strong>Status:</strong> <span id="agentState">--</span>
+</div>
+<div id="guiInfo">
+    <strong>GUI Version:</strong> <span id="guiVersion"></span>
+</div>
+<div id="benchAttributes"></div>
+
+<button id="startBtn">Start Listening</button>
+
+<h2>Devices</h2>
+<div id="devicesPanel"></div>
+
+<h2>Measurements</h2>
+<div id="measurements">Waiting for data...</div>
+
+<h2>Log</h2>
+<div id="log"></div>
+
+<script src="renderer.js"></script>
+</body>
+</html>
