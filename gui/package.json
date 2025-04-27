@@ -11,5 +11,8 @@
   "dependencies": {
     "amqplib": "^0.10.3",
     "electron": "^35.2.1"
+  },
+  "devDependencies": {
+    "electron-builder": "^26.0.12"
   }
 }
