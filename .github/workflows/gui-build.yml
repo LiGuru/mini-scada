@@ -28,5 +28,7 @@ jobs:
         working-directory: ./gui
 
       - name: Build Electron app
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
         working-directory: ./gui
