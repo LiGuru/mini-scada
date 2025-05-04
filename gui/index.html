@@ -122,7 +122,8 @@
             <h3>Agent Status</h3>
         </div>
         <div class="card-body">
-            <div class="status ready" id="status">Status: n/a</div>
+            <div class="StatusAgentId"><span class="label">Agent: </span><span class="value" id="statusAgentId"></span> </div>
+            <div class="status ready"><span class="label">Status: </span><span class="value" id="status"></span> </div>
             <div class="timestamp"><span class="label">Last Updated:</span> <span id="statusTimestamp" class="value">n/a</span></div>
         </div>
     </div>
@@ -145,17 +146,39 @@
     <div class="card">
         <div class="card-header">
             <i class="fas fa-chart-line"></i>
-            <h3>Measurement Details</h3>
+            <h3>Load details</h3>
         </div>
-        <div class="card-body">
-            <div><span class="label">Temperature:</span> <span id="temperature" class="value">n/a</span></div>
-            <div><span class="label">Current:</span> <span id="current" class="value">n/a</span></div>
-            <div><span class="label">Voltage:</span> <span id="voltage" class="value">n/a</span></div>
-            <div><span class="label">Measured At:</span> <span id="measuredAt" class="value">n/a</span></div>
+        <div class="card-body" id="loadId">
+            <div><span class="label">Current:</span> <span id="LoadCurrent" class="value">n/a</span></div>
+            <div><span class="label">Voltage:</span> <span id="LoadVoltage" class="value">n/a</span></div>
+            <div><span class="label">Measured At:</span> <span id="LoadMeasuredAt" class="value">n/a</span></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            <h3>Power Supply details</h3>
+        </div>
+        <div class="card-body" id="powerSupplyId">
+            <div><span class="label">Current:</span> <span id="PSCurrent" class="value">n/a</span></div>
+            <div><span class="label">Voltage:</span> <span id="PSVoltage" class="value">n/a</span></div>
+            <div><span class="label">Measured At:</span> <span id="PSMeasuredAt" class="value">n/a</span></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            <h3>DMM details</h3>
+        </div>
+        <div class="card-body" id="DmmId">
+            <div><span class="label">Current:</span> <span id="DMMCurrent" class="value">n/a</span></div>
+            <div><span class="label">Voltage:</span> <span id="DMMVoltage" class="value">n/a</span></div>
+            <div><span class="label">Resistance:</span> <span id="DMMResistance" class="value">n/a</span></div>
+            <div><span class="label">Measured At:</span> <span id="DMMMeasuredAt" class="value">n/a</span></div>
         </div>
     </div>
 </div>
 
-<script src="renderer.js"></script>
+<script type="module" src="renderer.js"></script>
 </body>
 </html>
