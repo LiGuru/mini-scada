@@ -2,7 +2,7 @@
 import pika
 import json
 import time
-from datetime import datetime
+from datetime import datetime, UTC
 from task_source import TaskFileSource
 
 READY_TIMEOUT = 30
@@ -11,6 +11,7 @@ abort_reason = ""
 agent_ready = False
 agent_id = "bench-01"
 task_log = []
+task_source = TaskFileSource(work_directory='./tasks_inbox')
 
 def connect():
     return pika.BlockingConnection(pika.ConnectionParameters('localhost'))
@@ -36,7 +37,7 @@ def forward_status_to_gui(channel, status):
     gui_message = {
         "agent_id": status["agent_id"],
         "status": status["status"],
-        "timestamp": datetime.utcnow().isoformat() + "Z"
+        "timestamp": datetime.now(UTC).isoformat() + "Z"
     }
     channel.basic_publish(exchange='gui_status', routing_key=routing_key, body=json.dumps(gui_message))
 
@@ -53,7 +54,7 @@ def send_abort(channel, reason, failed_task_id):
     channel.basic_publish(exchange='abort', routing_key=f"{agent_id}.abort", body=json.dumps(abort_message))
 
 def result_callback(ch, method, properties, body):
-    global execution_status, abort_reason
+    global execution_status, abort_reason, task_source
     result = json.loads(body)
     task_id = result.get("task_id")
     status = result.get("result", "unknown")
@@ -61,7 +62,7 @@ def result_callback(ch, method, properties, body):
 
     matching_task = next((t for t in task_log if t["task_id"] == task_id), None)
     if matching_task:
-        matching_task.update({"received_at": datetime.utcnow().isoformat() + "Z", "status": status, "details": details})
+        matching_task.update({"received_at": datetime.now(UTC).isoformat() + "Z", "status": status, "details": details})
         forward_result_to_gui(ch, result)
 
         if status != "pass":
@@ -69,6 +70,8 @@ def result_callback(ch, method, properties, body):
             abort_reason = f"Task {task_id} failed"
             send_abort(ch, abort_reason, task_id)
             ch.stop_consuming()
+        task_source.after_task_complete(result)
+        print(f"[Orchestrator] Task {task_id} completed successfully.")
     else:
         print(f"[Orchestrator] ⚠️ Unknown task_id: {task_id}")
     print(f"[Orchestrator] Received result for task {task_id}: {result}")
@@ -89,7 +92,7 @@ def save_log():
         json.dump(log_data, f, indent=4)
 
 def main():
-    global agent_ready
+    global agent_ready, task_source
     connection = connect()
     channel = connection.channel()
 
@@ -112,7 +115,6 @@ def main():
     channel.basic_consume(queue='results', on_message_callback=result_callback)
     channel.basic_consume(queue='orchestration_status', on_message_callback=status_callback)
 
-    task_source = TaskFileSource(directory='./tasks_inbox')
 
     print("[Orchestrator] Waiting for agent READY signal...")
 
@@ -130,7 +132,7 @@ def main():
         while True:
             next_task = task_source.get_next_task()
             if next_task:
-                task_log.append({"task_id": next_task["task_id"], "scenario": next_task["scenario"], "sent_at": datetime.utcnow().isoformat() + "Z", "status": "sent"})
+                task_log.append({"task_id": next_task["task_id"], "scenario": next_task["scenario"], "sent_at": datetime.now(UTC).isoformat() + "Z", "status": "sent"})
                 send_task(channel, next_task)
             connection.process_data_events(time_limit=1)
             time.sleep(1)  # Polling interval
