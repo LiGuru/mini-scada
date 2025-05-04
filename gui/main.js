@@ -1,3 +1,7 @@
+require('electron-reload')(__dirname, {
+    electron: require(`${__dirname}/node_modules/electron`)
+});
+
 const { app, BrowserWindow, ipcMain, screen } = require('electron');
 
 const amqp = require('amqplib');
@@ -19,7 +23,7 @@ async function createWindow() {
             nodeIntegration: false
         }
     });
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
     try {
         await mainWindow.loadFile('index.html');

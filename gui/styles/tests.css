@@ -1,0 +1,7 @@
+/* tests.css */
+.test-card {
+    border-left: 4px solid #4caf50;
+}
+.test-card .card-header i {
+    color: #4caf50;
+}

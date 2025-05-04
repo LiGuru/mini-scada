@@ -1,0 +1,7 @@
+.module-card {
+    border-left: 4px solid #00bcd4;
+}
+
+.module-card .card-header i {
+    color: #00bcd4;
+}

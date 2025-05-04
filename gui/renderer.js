@@ -5,6 +5,28 @@ import {formatDate} from "./utils/helpers.js";
 
 const api = window.electronAPI;
 
+document.addEventListener('DOMContentLoaded', () => {
+    const moduleDetails = document.getElementById('moduleDetailsContent');
+    const moduleCards = document.querySelectorAll('.module-card');
+
+    function loadModuleDetails(card) {
+        const moduleName = card.querySelector('h3').textContent;
+        const details = card.querySelector('.card-body').innerHTML;
+        moduleDetails.innerHTML = `<h4>${moduleName}</h4>${details}`;
+    }
+
+    if (moduleCards.length > 0) {
+        loadModuleDetails(moduleCards[0]); // Зарежда първия модул по подразбиране
+    }
+
+    moduleCards.forEach(card => {
+        card.addEventListener('click', () => {
+            loadModuleDetails(card);
+        });
+    });
+});
+
+
 function updateAgentStatus(status) {
     const agentIdElement = document.getElementById('statusAgentId');
     if (agentIdElement) {
