@@ -11,14 +11,15 @@ async function createWindow() {
     mainWindow = new BrowserWindow({
         width: width,
         height: height,
-        fullscreen: true,
-        kiosk: true,
+        fullscreen: false,
+        kiosk: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
             nodeIntegration: false
         }
     });
+    mainWindow.webContents.openDevTools();
 
     try {
         await mainWindow.loadFile('index.html');
