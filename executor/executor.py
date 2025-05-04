@@ -1,10 +1,12 @@
 # Executor Logic (Placeholder)
+import random
+
 import pika
 import json
 import time
 import threading
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 
 AGENT_ID = "bench-01"
 HEARTBEAT_INTERVAL = 5  # seconds
@@ -61,6 +63,46 @@ def heartbeat_loop():
     finally:
         connection.close()
 
+def use_load_measurement(current=0.0001, voltage=0.001):
+    # Placeholder for load measurement logic
+    def get_const():
+        return random.uniform(1, 1.99)
+
+    load_measurement = {"load":{
+        "current": current * get_const(),
+        "voltage": voltage * get_const(),
+        "measured_at": datetime.now(UTC).isoformat() + "Z"
+        }
+    }
+    return load_measurement
+
+def use_power_supply_measurement(current=0.0001, voltage=0.001):
+    # Placeholder for power supply measurement logic
+    def get_const():
+        return random.uniform(1, 1.99)
+
+    power_supply_measurement = {"power_supply":{
+        "current": current * get_const(),
+        "voltage": voltage * get_const(),
+        "measured_at": datetime.now(UTC).isoformat() + "Z"
+        }
+    }
+    return power_supply_measurement
+
+def use_dmm_measurement(current=0.0001, voltage=0.001, resistance=0.001):
+    # Placeholder for DMM measurement logic
+    def get_const():
+        return random.uniform(1, 1.99)
+    dmm_measurement = {
+        "dmm": {
+            "current": current * get_const(),
+            "voltage": voltage * get_const(),
+            "resistance": resistance * get_const(),
+            "measured_at": datetime.now(UTC).isoformat() + "Z"
+        }
+    }
+    return dmm_measurement
+
 def task_callback(ch, method, properties, body):
     global abort_flag
     state = load_state()
@@ -88,22 +130,24 @@ def task_callback(ch, method, properties, body):
             ch.basic_ack(delivery_tag=method.delivery_tag)
             connection.close()
             return
+        details = {}
 
-        temperature = 32.0 + cycle_num * 0.1
-        current = 1.2
-        voltage = 4.0 + cycle_num * 0.02
+
+        match task.get('scenario'):
+
+            case "battery-cycle-check":
+                details.update(use_load_measurement())
+                details.update(use_power_supply_measurement())
+                details.update(use_dmm_measurement())
 
         result = {
             "agent_id": AGENT_ID,
             "task_id": task_id,
             "cycle_number": cycle_num,
             "result": "pass",
-            "details": {
-                "temperature": temperature,
-                "current": current,
-                "voltage": voltage,
-                "measured_at": datetime.utcnow().isoformat() + "Z"
-            }
+            "timestamp": datetime.now(UTC).isoformat() + "Z",
+            "details": details,
+
         }
 
         channel_result.basic_publish(
