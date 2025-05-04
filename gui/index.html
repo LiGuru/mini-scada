@@ -3,180 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Measurement Dashboard</title>
+    <title>DeskSat Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .card {
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .card-header i {
-            font-size: 30px;
-            color: #4CAF50;
-            margin-right: 10px;
-        }
-
-        .card-header h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .card-body {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .status, .result {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .status.ready {
-            color: #4CAF50;
-        }
-
-        .status.failed {
-            color: #F44336;
-        }
-
-        .result.pass {
-            color: #4CAF50;
-        }
-
-        .result.fail {
-            color: #F44336;
-        }
-
-        .label {
-            color: #999;
-            font-weight: normal;
-        }
-
-        .value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .timestamp {
-            font-size: 0.9rem;
-            color: #777;
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/modules.css">
+    <link rel="stylesheet" href="styles/instruments.css">
+    <link rel="stylesheet" href="styles/tests.css">
 </head>
 <body>
-
-<div class="dashboard">
-    <!-- Status Card -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-clipboard-list"></i>
-            <h3>Agent Status</h3>
+    <div class="main-container">
+<header>
+    <div class="header-left">
+        <h1>DeskSat Dashboard</h1>
+    </div>
+    <div class="header-center">
+        <div>Agent: <span id="statusAgentId">n/a</span></div>
+        <div>Status: <span id="status">n/a</span></div>
+    </div>
+    <div class="header-right">
+        <div>Time: <span id="statusTimestamp">--:--</span></div>
+    </div>
+</header>
+        <div class="instrument-block">
+            <div class="instrument-circle" id="loadCircle">
+            <div class="circle-label">Load</div>
+            <div><span class="label">Current:</span> <span id="LoadCurrent">n/a</span></div>
+            <div><span class="label">Voltage:</span> <span id="LoadVoltage">n/a</span></div>
+            <div><span class="label">Measured At:</span> <span id="LoadMeasuredAt">n/a</span></div>
         </div>
-        <div class="card-body">
-            <div class="StatusAgentId"><span class="label">Agent: </span><span class="value" id="statusAgentId"></span> </div>
-            <div class="status ready"><span class="label">Status: </span><span class="value" id="status"></span> </div>
-            <div class="timestamp"><span class="label">Last Updated:</span> <span id="statusTimestamp" class="value">n/a</span></div>
+        <div class="instrument-circle" id="powerSupplyCircle">
+            <div class="circle-label">Power Supply</div>
+            <div><span class="label">Current:</span> <span id="PSCurrent">n/a</span></div>
+            <div><span class="label">Voltage:</span> <span id="PSVoltage">n/a</span></div>
+            <div><span class="label">Measured At:</span> <span id="PSMeasuredAt">n/a</span></div>
+        </div>
+        <div class="instrument-circle" id="dmmCircle">
+            <div class="circle-label">DMM</div>
+            <div><span class="label">Current:</span> <span id="DMMCurrent">n/a</span></div>
+            <div><span class="label">Voltage:</span> <span id="DMMVoltage">n/a</span></div>
+            <div><span class="label">Resistance:</span> <span id="DMMResistance">n/a</span></div>
+            <div><span class="label">Measured At:</span> <span id="DMMMeasuredAt">n/a</span></div>
         </div>
     </div>
 
-    <!-- Test Result Card -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-tasks"></i>
-            <h3>Test Results</h3>
+<main>
+    <section class="sidebar-section">
+        <h3>Module Details</h3>
+        <div id="moduleDetailsContent">
+            <p>Select a module to see details.</p>
         </div>
-        <div class="card-body">
-            <div class="result pass" id="result">Result: n/a</div>
-            <div><span class="label">Agent ID:</span> <span id="agentId" class="value">n/a</span></div>
-            <div><span class="label">Task ID:</span> <span id="taskId" class="value">n/a</span></div>
-            <div><span class="label">Cycle Number:</span> <span id="cycleNumber" class="value">n/a</span></div>
+    </section>
+    <!-- Modules Section -->
+    <section class="modules-section">
+        <div class="card module-card" id="UHFId">
+            <div class="card-header">
+                <i class="fas fa-satellite"></i>
+                <h3>UHF Module</h3>
+            </div>
+            <div class="card-body">
+                <div><span class="label">Signal Strength:</span> <span id="UHFSignal">n/a</span></div>
+                <div><span class="label">Bitrate:</span> <span id="UHFBitrate">n/a</span></div>
+                <div><span class="label">Measured At:</span> <span id="UHFMeasuredAt">n/a</span></div>
+            </div>
         </div>
-    </div>
 
-    <!-- Measurement Details Card -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-chart-line"></i>
-            <h3>Load details</h3>
+        <div class="card module-card" id="OBCId">
+            <div class="card-header">
+                <i class="fas fa-microchip"></i>
+                <h3>OBC Module</h3>
+            </div>
+            <div class="card-body">
+                <div><span class="label">CPU Load:</span> <span id="OBCCpuLoad">n/a</span></div>
+                <div><span class="label">Memory Usage:</span> <span id="OBCMemory">n/a</span></div>
+                <div><span class="label">Measured At:</span> <span id="OBCMeasuredAt">n/a</span></div>
+            </div>
         </div>
-        <div class="card-body" id="loadId">
-            <div><span class="label">Current:</span> <span id="LoadCurrent" class="value">n/a</span></div>
-            <div><span class="label">Voltage:</span> <span id="LoadVoltage" class="value">n/a</span></div>
-            <div><span class="label">Measured At:</span> <span id="LoadMeasuredAt" class="value">n/a</span></div>
+
+        <div class="card module-card" id="ADCSId">
+            <div class="card-header">
+                <i class="fas fa-compass"></i>
+                <h3>ADCS Module</h3>
+            </div>
+            <div class="card-body">
+                <div><span class="label">Attitude:</span> <span id="ADCSAttitude">n/a</span></div>
+                <div><span class="label">Angular Velocity:</span> <span id="ADCSAngularVelocity">n/a</span></div>
+                <div><span class="label">Measured At:</span> <span id="ADCSMeasuredAt">n/a</span></div>
+            </div>
         </div>
-    </div>
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-chart-line"></i>
-            <h3>Power Supply details</h3>
+
+        <div class="card module-card" id="SDRId">
+            <div class="card-header">
+                <i class="fas fa-broadcast-tower"></i>
+                <h3>SDR Module</h3>
+            </div>
+            <div class="card-body">
+                <div><span class="label">Spectrum:</span> <span id="SDRSpectrum">n/a</span></div>
+                <div><span class="label">Bandwidth:</span> <span id="SDRBandwidth">n/a</span></div>
+                <div><span class="label">Measured At:</span> <span id="SDRMeasuredAt">n/a</span></div>
+            </div>
         </div>
-        <div class="card-body" id="powerSupplyId">
-            <div><span class="label">Current:</span> <span id="PSCurrent" class="value">n/a</span></div>
-            <div><span class="label">Voltage:</span> <span id="PSVoltage" class="value">n/a</span></div>
-            <div><span class="label">Measured At:</span> <span id="PSMeasuredAt" class="value">n/a</span></div>
+
+        <div class="card module-card" id="SBANDId">
+            <div class="card-header">
+                <i class="fas fa-broadcast-tower"></i>
+                <h3>S-BAND Transceiver</h3>
+            </div>
+            <div class="card-body">
+                <div><span class="label">Tx Power:</span> <span id="SBANDTxPower">n/a</span></div>
+                <div><span class="label">Rx Power:</span> <span id="SBANDRxPower">n/a</span></div>
+                <div><span class="label">Measured At:</span> <span id="SBANDMeasuredAt">n/a</span></div>
+            </div>
         </div>
-    </div>
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-chart-line"></i>
-            <h3>DMM details</h3>
+
+        <div class="card module-card" id="XBANDId">
+            <div class="card-header">
+                <i class="fas fa-signal"></i>
+                <h3>X-BAND Transmitter</h3>
+            </div>
+            <div class="card-body">
+                <div><span class="label">Throughput:</span> <span id="XBANDThroughput">n/a</span></div>
+                <div><span class="label">Temperature:</span> <span id="XBANDTemp">n/a</span></div>
+                <div><span class="label">Measured At:</span> <span id="XBANDMeasuredAt">n/a</span></div>
+            </div>
         </div>
-        <div class="card-body" id="DmmId">
-            <div><span class="label">Current:</span> <span id="DMMCurrent" class="value">n/a</span></div>
-            <div><span class="label">Voltage:</span> <span id="DMMVoltage" class="value">n/a</span></div>
-            <div><span class="label">Resistance:</span> <span id="DMMResistance" class="value">n/a</span></div>
-            <div><span class="label">Measured At:</span> <span id="DMMMeasuredAt" class="value">n/a</span></div>
+
+        <div class="card module-card" id="EPSId">
+            <div class="card-header">
+                <i class="fas fa-battery-full"></i>
+                <h3>EPS Module</h3>
+            </div>
+            <div class="card-body">
+                <div><span class="label">Battery Voltage:</span> <span id="EPSVoltage">n/a</span></div>
+                <div><span class="label">Current:</span> <span id="EPSCurrent">n/a</span></div>
+                <div><span class="label">Measured At:</span> <span id="EPSMeasuredAt">n/a</span></div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Tests Section -->
+    <section class="tests-section">
+        <div class="card test-card">
+            <div class="card-header">
+                <i class="fas fa-tasks"></i>
+                <h3>Test Results</h3>
+            </div>
+            <div class="card-body">
+                <div>Result: <span id="result">n/a</span></div>
+                <div>Agent ID: <span id="agentId">n/a</span></div>
+                <div>Task ID: <span id="taskId">n/a</span></div>
+                <div>Cycle Number: <span id="cycleNumber">n/a</span></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div id="logs">System logs will appear here.</div>
+</footer>
 </div>
 
 <script type="module" src="renderer.js"></script>
