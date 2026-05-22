@@ -1,0 +1,15 @@
+{
+  "agent_id": "agent-001",
+  "instruments": {
+    "power_supply": [
+      "set_voltage",
+      "measure_voltage"
+    ],
+    "dmm": [
+      "measure_current"
+    ]
+  },
+  "supported_modules": [
+    "battery_controller_v2"
+  ]
+}

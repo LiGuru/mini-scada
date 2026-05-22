@@ -1,0 +1,10 @@
+{
+  "task_id": "task-002",
+  "type": "instrument_command",
+  "target": "power_supply",
+  "command": "set_voltage",
+  "parameters": {
+    "channel": 2,
+    "value": 16.5
+  }
+}
