@@ -10,16 +10,19 @@ window.electronAPI = {
     _statusCbs:      [],
     _measurementCbs: [],
     _instrumentCbs:  [],
+    _authCbs:        [],
 
     onBrokerStatus(cb) { this._brokerCbs.push(cb); },
     onStatus(cb)       { this._statusCbs.push(cb); },
     onMeasurement(cb)  { this._measurementCbs.push(cb); },
     onInstruments(cb)  { this._instrumentCbs.push(cb); },
+    onAuth(cb)         { this._authCbs.push(cb); },
 
     _emitBroker(d)      { this._brokerCbs.forEach(cb => cb(d)); },
     _emitStatus(d)      { this._statusCbs.forEach(cb => cb(d)); },
     _emitMeasurement(d) { this._measurementCbs.forEach(cb => cb(d)); },
     _emitInstruments(d) { this._instrumentCbs.forEach(cb => cb(d)); },
+    _emitAuth(d)        { this._authCbs.forEach(cb => cb(d)); },
 };
 
 // ── Helpers ──────────────────────────────────────────────────────
@@ -162,6 +165,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Simulate broker connected immediately in preview
     window.electronAPI._emitBroker({ status: 'ok', url: 'amqp://localhost (preview)' });
+
+    // Simulate NFC reader attach + authentication after 1.5 s
+    setTimeout(() => {
+        window.electronAPI._emitAuth({ type: 'reader_attached', name: 'ACS ACR122U (preview)' });
+    }, 1500);
+    setTimeout(() => {
+        window.electronAPI._emitAuth({
+            type: 'authenticated',
+            operator: { id: 1, name: 'Preview Operator', badge_uid: 'AABBCCDD', bench_ids: ['bench-01'], role: 'operator' },
+        });
+    }, 3000);
 
     window.electronAPI._emitStatus({ agent_id: 'bench-01', status: 'ready',   timestamp: iso() });
 

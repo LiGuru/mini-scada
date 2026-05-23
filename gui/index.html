@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles/tests.css?v=3">
     <link rel="stylesheet" href="styles/trends.css?v=3">
     <link rel="stylesheet" href="styles/config.css?v=2">
+    <link rel="stylesheet" href="styles/auth.css?v=1">
 </head>
 <body>
 
@@ -34,7 +35,18 @@
         </div>
     </div>
 
+    <div class="operator-pill no-reader" id="operatorPill">
+        <i class="fas fa-id-badge op-icon"></i>
+        <span id="operatorName">No reader</span>
+    </div>
+
     <div class="topbar-clock" id="topbarClock">--:--:--</div>
+</div>
+
+<!-- ── AUTH BANNER ───────────────────────────────────── -->
+<div class="auth-banner" id="authBanner">
+    <i class="fas fa-wifi"></i>
+    <span id="authBannerText">Tap badge to authenticate</span>
 </div>
 
 <!-- ── WORKSPACE (Live View) ─────────────────────── -->
@@ -284,6 +296,6 @@
     <div class="alarm-item dim" id="alarmNoFaults"><i class="fas fa-check-circle"></i> No active alarms</div>
 </div>
 
-<script type="module" src="renderer.js?v=11"></script>
+<script type="module" src="renderer.js?v=12"></script>
 </body>
 </html>

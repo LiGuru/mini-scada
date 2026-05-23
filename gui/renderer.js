@@ -599,6 +599,75 @@ function updateModuleHealthBadge(key, hasFault) {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// AUTH STATE
+// ══════════════════════════════════════════════════════════════════
+
+const authState = { authenticated: false, operator: null, readerPresent: false };
+
+function onAuth(data) {
+    const pill        = document.getElementById('operatorPill');
+    const nameEl      = document.getElementById('operatorName');
+    const banner      = document.getElementById('authBanner');
+    const bannerTxt   = document.getElementById('authBannerText');
+
+    if (data.type === 'reader_attached') {
+        authState.readerPresent = true;
+        if (pill) pill.classList.remove('no-reader');
+        if (!authState.authenticated) {
+            if (banner) banner.classList.add('visible');
+            if (bannerTxt) bannerTxt.textContent = 'Tap badge to authenticate';
+        }
+
+    } else if (data.type === 'reader_detached') {
+        authState.readerPresent = false;
+        if (pill) pill.classList.add('no-reader');
+        if (banner) banner.classList.remove('visible');
+        _setAuth(false, null);
+
+    } else if (data.type === 'authenticated') {
+        _setAuth(true, data.operator);
+        if (pill) { pill.className = 'operator-pill authed'; }
+        if (nameEl) nameEl.textContent = data.operator?.name ?? 'Authenticated';
+        if (banner) banner.classList.remove('visible');
+
+    } else if (data.type === 'deauthenticated') {
+        _setAuth(false, null);
+        if (pill) { pill.className = 'operator-pill'; }
+        if (nameEl) nameEl.textContent = 'Not authenticated';
+        if (authState.readerPresent) {
+            if (banner) banner.classList.add('visible');
+            if (bannerTxt) bannerTxt.textContent = 'Tap badge to authenticate';
+        }
+
+    } else if (data.type === 'nfc_error') {
+        if (bannerTxt) bannerTxt.textContent = `Auth error: ${data.message}`;
+        if (banner) banner.classList.add('visible');
+        setTimeout(() => { if (banner) banner.classList.remove('visible'); }, 4000);
+    }
+}
+
+function _setAuth(authenticated, operator) {
+    authState.authenticated = authenticated;
+    authState.operator = operator;
+    _applyWriteLocks();
+}
+
+function _applyWriteLocks() {
+    // Write-protected elements: config add/edit buttons, reset button.
+    // More controls can be added here as the system grows.
+    const writeSelectors = ['#cfgAddInstrBtn', '#cfgAddModBtn', '#cfgResetBtn'];
+    for (const sel of writeSelectors) {
+        const el = document.querySelector(sel);
+        if (!el) continue;
+        if (authState.authenticated) {
+            el.classList.remove('write-locked');
+        } else {
+            el.classList.add('write-locked');
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════
 // MEASUREMENT DISPATCHER
 // ══════════════════════════════════════════════════════════════════
 
@@ -640,3 +709,7 @@ api.onBrokerStatus(onBrokerStatus);
 api.onStatus(onStatus);
 api.onInstruments(onInstruments);
 api.onMeasurement(onMeasurement);
+if (api.onAuth) api.onAuth(onAuth);
+
+// Apply initial write locks (no reader = not authenticated)
+_applyWriteLocks();

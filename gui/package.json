@@ -32,7 +32,8 @@
     }
   },
   "dependencies": {
-    "amqplib": "^0.10.3"
+    "amqplib": "^0.10.3",
+    "nfc-pcsc": "^0.8.1"
   },
   "repository": {
     "type": "git",

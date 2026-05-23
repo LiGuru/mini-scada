@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const amqp = require('amqplib');
 const path = require('path');
+const { NFCAuthStrategy } = require('./auth/nfc-strategy');
 
 // console writes throw EIO when there is no TTY (launched from Finder, etc.)
 const log = {
@@ -20,14 +21,51 @@ if (process.env.NODE_ENV === 'development') {
     }
 }
 
-const AGENT_ID      = process.env.AGENT_ID || 'bench-01';
-const RABBIT_URL    = process.env.RABBIT_URL || 'amqp://localhost';
-const RECONNECT_MS  = 5000;
+const AGENT_ID           = process.env.AGENT_ID || 'bench-01';
+const RABBIT_URL         = process.env.RABBIT_URL || 'amqp://localhost';
+const OPERATORS_API_BASE = process.env.OPERATORS_API_BASE || 'https://vlahovski.info/api/v1';
+const RECONNECT_MS       = 5000;
 
 let mainWindow;
+let nfcStrategy = null;
 
 function sendBroker(status, extra = {}) {
     try { mainWindow?.webContents?.send('gui_broker', { status, ...extra }); } catch {}
+}
+
+function sendAuth(type, payload = {}) {
+    try { mainWindow?.webContents?.send('gui_auth', { type, ...payload }); } catch {}
+}
+
+function setupNFC() {
+    nfcStrategy = new NFCAuthStrategy({ operatorsApiBase: OPERATORS_API_BASE });
+
+    nfcStrategy.on('reader_attached', ({ name }) => {
+        log.info(`[NFC] Reader attached: ${name}`);
+        sendAuth('reader_attached', { name });
+    });
+
+    nfcStrategy.on('reader_detached', ({ name }) => {
+        log.warn(`[NFC] Reader detached: ${name}`);
+        sendAuth('reader_detached', { name });
+    });
+
+    nfcStrategy.on('authenticated', ({ operator }) => {
+        log.info(`[NFC] Authenticated: ${operator.name} (${operator.badge_uid})`);
+        sendAuth('authenticated', { operator });
+    });
+
+    nfcStrategy.on('deauthenticated', () => {
+        log.info('[NFC] Card removed — deauthenticated');
+        sendAuth('deauthenticated');
+    });
+
+    nfcStrategy.on('error', ({ message }) => {
+        log.warn(`[NFC] ${message}`);
+        sendAuth('nfc_error', { message });
+    });
+
+    nfcStrategy.start();
 }
 
 async function createWindow() {
@@ -109,6 +147,7 @@ async function setupRabbit() {
 app.whenReady().then(async () => {
     await createWindow();
     setupRabbit();
+    setupNFC();
 });
 
 app.on('window-all-closed', () => {
