@@ -1,7 +1,11 @@
 const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const amqp = require('amqplib');
 const path = require('path');
-const { MockNFCStrategy }    = require('./auth/mock-nfc-strategy');
+
+// Load .env from the project root (one level above gui/)
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+
+const { MockNFCStrategy } = require('./auth/mock-nfc-strategy');
 
 // console writes throw EIO when there is no TTY (launched from Finder, etc.)
 const log = {
