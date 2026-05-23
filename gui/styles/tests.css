@@ -1,7 +1,3 @@
-/* tests.css */
-.test-card {
-    border-left: 4px solid #4caf50;
-}
-.test-card .card-header i {
-    color: #4caf50;
-}
+/* Result badge in active test / history */
+#result.pass { color: var(--ok); }
+#result.fail { color: var(--fault); }

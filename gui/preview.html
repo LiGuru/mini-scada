@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini SCADA</title>
+    <title>Mini SCADA — Preview</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="styles/main.css?v=3">
     <link rel="stylesheet" href="styles/instruments.css?v=3">
@@ -27,7 +27,7 @@
 
     <div class="topbar-status">
         <div class="status-pill dim" id="brokerStatusPill"><div class="led dim" id="brokerLed"></div> <span id="brokerStatusText">CONNECTING...</span></div>
-        <div class="status-pill ok" id="agentStatusPill">
+        <div class="status-pill dim" id="agentStatusPill">
             <div class="led dim" id="agentLed"></div>
             <span id="statusAgentId">n/a</span>
             <span id="status">n/a</span>
@@ -284,6 +284,8 @@
     <div class="alarm-item dim" id="alarmNoFaults"><i class="fas fa-check-circle"></i> No active alarms</div>
 </div>
 
+<!-- Stub must load before renderer so window.electronAPI exists -->
+<script src="preview-stub.js?v=2"></script>
 <script type="module" src="renderer.js?v=11"></script>
 </body>
 </html>

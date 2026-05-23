@@ -1,7 +1,79 @@
-.module-card {
-    border-left: 4px solid #00bcd4;
+/* ── Module grid area ────────────────────────────── */
+.module-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+  align-content: start;
+  min-height: 0;
+}
+.module-grid::-webkit-scrollbar { width: 4px; }
+.module-grid::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* ── Module tile ─────────────────────────────────── */
+.module-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.module-tile:hover { border-color: var(--border2); transform: translateY(-2px); }
+.module-tile.selected { border-color: var(--accent); }
+.module-tile.fault-tile { border-color: rgba(240,64,64,.4); }
+.module-tile.idle-tile  { opacity: 0.5; }
+
+/* Update flash */
+@keyframes tile-flash {
+  0%,100% { background: var(--surface); }
+  40%     { background: #001a22; }
+}
+.module-tile.tile-updated { animation: tile-flash 0.5s ease-out; }
+
+.tile-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 12px; border-bottom: 1px solid var(--border);
+}
+.tile-header-left { display: flex; align-items: center; gap: 8px; }
+.tile-header-left i { font-size: 12px; color: var(--accent); }
+.tile-name { font-size: 12px; font-weight: 600; color: var(--head); }
+
+.tile-body { padding: 9px 12px; display: flex; flex-direction: column; gap: 5px; }
+
+.tile-kv { display: flex; justify-content: space-between; align-items: baseline; }
+.tile-key { font-size: 10px; color: var(--dim); }
+.tile-val { font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--text); }
+.tile-val .unit { font-size: 9px; color: var(--dim); font-weight: 400; }
+.tile-val.warn-val  { color: var(--warn); }
+.tile-val.fault-val { color: var(--fault); }
+
+.tile-footer {
+  padding: 5px 12px; background: var(--bg);
+  border-top: 1px solid var(--border);
+  font-size: 9px; color: var(--dim);
+  display: flex; justify-content: space-between;
 }
 
-.module-card .card-header i {
-    color: #00bcd4;
+/* Fault message inside tile */
+.tile-fault-msg {
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--fault);
+  display: flex; align-items: center; gap: 4px;
 }
+
+/* ── Waiting placeholder ─────────────────────────── */
+.module-placeholder {
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 50px; color: var(--dim); gap: 12px;
+}
+.module-placeholder i   { font-size: 2.5rem; }
+.module-placeholder p   { font-size: 0.85rem; }
+
+/* ── Unit / na helpers ───────────────────────────── */
+.unit { color: var(--dim); }
+.na   { color: var(--dim); font-style: italic; }

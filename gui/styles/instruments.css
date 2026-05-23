@@ -1,37 +1,80 @@
-.instrument-block {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+/* ── Instrument faceplate row ────────────────────── */
+.faceplate-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-.instrument-circle {
-    width: 220px;
-    height: 220px;
-    background-color: #2a2a2a;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border: 4px solid #ff9800;
-    color: #fff;
+/* Dynamic instrument row — auto-fills any number of faceplates */
+.faceplate-row-dyn {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
 }
 
-.instrument-circle:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 1);
+.faceplate {
+  background: var(--surface);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.circle-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
+.fp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fp-name {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.fp-name i { font-size: 10px; }
+
+.fp-readings {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
 }
 
-.instrument-circle div:not(.circle-label) {
-    font-size: 0.8rem;
-    color: #ccc;
+.reading {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 60px;
+}
+.reading-label {
+  font-size: 9px;
+  color: var(--dim);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.reading-value {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--head);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.reading-value.live { color: var(--ok); }
+.reading-unit {
+  font-size: 10px;
+  color: var(--dim);
+}
+
+/* Sparkline */
+.fp-sparkline { height: 24px; }
+.fp-sparkline svg { display: block; width: 100%; height: 100%; }
+.fp-sparkline polyline {
+  fill: none;
+  stroke: var(--ok);
+  stroke-width: 1.5;
+  opacity: 0.7;
 }

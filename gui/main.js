@@ -1,81 +1,116 @@
-require('electron-reload')(__dirname, {
-    electron: require(`${__dirname}/node_modules/electron`)
-});
-
 const { app, BrowserWindow, ipcMain, screen } = require('electron');
-
 const amqp = require('amqplib');
 const path = require('path');
 
+// console writes throw EIO when there is no TTY (launched from Finder, etc.)
+const log = {
+    info:  (...a) => { try { console.log(...a);   } catch {} },
+    warn:  (...a) => { try { console.warn(...a);  } catch {} },
+    error: (...a) => { try { console.error(...a); } catch {} },
+};
+
+// electron-reload is a devDependency — only require in development.
+if (process.env.NODE_ENV === 'development') {
+    try {
+        require('electron-reload')(__dirname, {
+            electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+        });
+    } catch (e) {
+        log.warn('[Electron] electron-reload not available:', e.message);
+    }
+}
+
+const AGENT_ID      = process.env.AGENT_ID || 'bench-01';
+const RABBIT_URL    = process.env.RABBIT_URL || 'amqp://localhost';
+const RECONNECT_MS  = 5000;
+
 let mainWindow;
 
+function sendBroker(status, extra = {}) {
+    try { mainWindow?.webContents?.send('gui_broker', { status, ...extra }); } catch {}
+}
+
 async function createWindow() {
-    const primaryDisplay = screen.getPrimaryDisplay();
-    const { width, height } = primaryDisplay.workAreaSize;
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
     mainWindow = new BrowserWindow({
-        width: width,
-        height: height,
+        width,
+        height,
         fullscreen: false,
         kiosk: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
-            nodeIntegration: false
-        }
+            nodeIntegration: false,
+        },
     });
+
     // mainWindow.webContents.openDevTools();
 
     try {
         await mainWindow.loadFile('index.html');
     } catch (err) {
-        console.error("[Electron] Failed to load GUI:", err);
+        log.error('[Electron] Failed to load GUI:', err);
     }
 }
 
-// Функция за настройване на RabbitMQ
 async function setupRabbit() {
+    sendBroker('connecting');
     try {
-        const conn = await amqp.connect('amqp://localhost');
+        const conn    = await amqp.connect(RABBIT_URL);
         const channel = await conn.createChannel();
 
-        // Деклариране на опашките за GUI
-        const qStatus = await channel.assertQueue('gui_status.bench-01', { durable: false });
-        const qResults = await channel.assertQueue('gui_results.bench-01', { durable: false });
+        const qStatus      = await channel.assertQueue(`gui_status.${AGENT_ID}`,      { durable: false });
+        const qResults     = await channel.assertQueue(`gui_results.${AGENT_ID}`,     { durable: false });
+        const qInstruments = await channel.assertQueue(`gui_instruments.${AGENT_ID}`, { durable: false });
 
-        // Слушане за съобщения на тези опашки
+        await channel.bindQueue(qInstruments.queue, 'instruments', `${AGENT_ID}.instruments`);
+
         channel.consume(qStatus.queue, (msg) => {
             if (msg !== null) {
-                const content = JSON.parse(msg.content.toString());
-                console.log('Received gui_status consume:', content);
-                mainWindow.webContents.send( 'gui_status', content);  // Изпращане към renderer
-                channel.ack(msg);  // Потвърдете получаването на съобщението
+                mainWindow.webContents.send('gui_status', JSON.parse(msg.content.toString()));
+                channel.ack(msg);
             }
         });
 
         channel.consume(qResults.queue, (msg) => {
             if (msg !== null) {
-                const content = JSON.parse(msg.content.toString());
-                console.log('Received gui_results consume:', content);
-                mainWindow.webContents.send('gui_results', content);  // Изпращане към renderer
-                channel.ack(msg);  // Потвърдете получаването на съобщението
+                mainWindow.webContents.send('gui_results', JSON.parse(msg.content.toString()));
+                channel.ack(msg);
             }
         });
 
-        console.log('[RabbitMQ] Listening for messages on gui_status and gui_results...');
+        channel.consume(qInstruments.queue, (msg) => {
+            if (msg !== null) {
+                mainWindow.webContents.send('gui_instruments', JSON.parse(msg.content.toString()));
+                channel.ack(msg);
+            }
+        });
+
+        sendBroker('ok', { url: RABBIT_URL });
+        log.info(`[RabbitMQ] Connected to ${RABBIT_URL}. Listening for agent ${AGENT_ID}...`);
+
+        conn.on('error', (err) => {
+            log.error('[RabbitMQ] Connection error:', err.message);
+        });
+
+        conn.on('close', () => {
+            log.warn('[RabbitMQ] Connection closed — reconnecting in', RECONNECT_MS, 'ms');
+            sendBroker('reconnecting');
+            setTimeout(setupRabbit, RECONNECT_MS);
+        });
+
     } catch (error) {
-        console.error('[RabbitMQ] Error setting up:', error);
+        log.error('[RabbitMQ] Setup error:', error.message);
+        sendBroker('error', { message: error.message });
+        setTimeout(setupRabbit, RECONNECT_MS);
     }
 }
 
-// Стартиране на приложението
-app.whenReady().then(() => {
-    createWindow();
-    setupRabbit();  // Инициализация на RabbitMQ
+app.whenReady().then(async () => {
+    await createWindow();
+    setupRabbit();
 });
 
-// Когато всички прозорци бъдат затворени, приключваме приложението
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    if (process.platform !== 'darwin') app.quit();
 });
