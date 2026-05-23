@@ -1,7 +1,8 @@
 const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const amqp = require('amqplib');
 const path = require('path');
-const { NFCAuthStrategy } = require('./auth/nfc-strategy');
+const { NFCAuthStrategy }    = require('./auth/nfc-strategy');
+const { MockNFCStrategy }    = require('./auth/mock-nfc-strategy');
 
 // console writes throw EIO when there is no TTY (launched from Finder, etc.)
 const log = {
@@ -38,7 +39,9 @@ function sendAuth(type, payload = {}) {
 }
 
 function setupNFC() {
-    nfcStrategy = new NFCAuthStrategy({ operatorsApiBase: OPERATORS_API_BASE });
+    const useMock = process.env.MOCK_NFC === '1' || process.env.NODE_ENV === 'development';
+    const Cls     = useMock ? MockNFCStrategy : NFCAuthStrategy;
+    nfcStrategy   = new Cls({ operatorsApiBase: OPERATORS_API_BASE });
 
     nfcStrategy.on('reader_attached', ({ name }) => {
         log.info(`[NFC] Reader attached: ${name}`);
