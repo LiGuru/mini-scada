@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const amqp = require('amqplib');
 const path = require('path');
-const { NFCAuthStrategy }    = require('./auth/nfc-strategy');
 const { MockNFCStrategy }    = require('./auth/mock-nfc-strategy');
 
 // console writes throw EIO when there is no TTY (launched from Finder, etc.)
@@ -40,8 +39,23 @@ function sendAuth(type, payload = {}) {
 
 function setupNFC() {
     const useMock = process.env.MOCK_NFC === '1' || process.env.NODE_ENV === 'development';
-    const Cls     = useMock ? MockNFCStrategy : NFCAuthStrategy;
-    nfcStrategy   = new Cls({ operatorsApiBase: OPERATORS_API_BASE });
+    let Cls;
+    if (useMock) {
+        Cls = MockNFCStrategy;
+    } else {
+        // Lazy-load the native PC-SC addon only in production.
+        // In dev mode this require never runs, avoiding the NODE_MODULE_VERSION mismatch.
+        // For production: run `npx electron-rebuild` after npm install.
+        try {
+            Cls = require('./auth/nfc-strategy').NFCAuthStrategy;
+        } catch (e) {
+            log.error('[NFC] Failed to load nfc-strategy:', e.message);
+            log.error('[NFC] Run: npx electron-rebuild   to recompile native modules for Electron.');
+            sendAuth('nfc_error', { message: 'NFC module not compiled for this Electron version. Run: npx electron-rebuild' });
+            return;
+        }
+    }
+    nfcStrategy = new Cls({ operatorsApiBase: OPERATORS_API_BASE });
 
     nfcStrategy.on('reader_attached', ({ name }) => {
         log.info(`[NFC] Reader attached: ${name}`);
