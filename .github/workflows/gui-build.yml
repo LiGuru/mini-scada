@@ -11,6 +11,7 @@ jobs:
     name: Build GUI on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false   # finish all platforms even if one fails
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
@@ -21,10 +22,24 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
+          cache: npm
+          cache-dependency-path: gui/package-lock.json
 
-      - name: Install dependencies
+      # nfc-pcsc wraps @pokusew/pcsclite which needs the PC/SC headers on Linux.
+      # macOS ships PCSC.framework; Windows ships WinSCard — neither needs extras.
+      - name: Install pcsclite system libraries (Linux only)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -q && sudo apt-get install -y libpcsclite-dev pcscd
+
+      - name: Install npm dependencies
         run: npm install
+        working-directory: ./gui
+
+      # Rebuild native addons (nfc-pcsc/@pokusew/pcsclite) against
+      # the exact Node ABI bundled in this version of Electron.
+      - name: Rebuild native modules for Electron
+        run: npm run rebuild
         working-directory: ./gui
 
       - name: Build Electron app

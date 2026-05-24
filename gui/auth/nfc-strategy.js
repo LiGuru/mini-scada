@@ -5,10 +5,12 @@
  *   card tap → read UID → GET /operators/nfc/{uid} → emit 'authenticated'
  *   card removed          → emit 'deauthenticated'
  *   no reader present     → emits nothing, logs warning (non-fatal)
+ *
+ * Linux note: pcsclite must be installed before npm install + npm run rebuild.
+ *   sudo apt-get install pcscd libpcsclite-dev && npm run rebuild
  */
-const { NFC } = require('nfc-pcsc');
-const https   = require('https');
-const http    = require('http');
+const https = require('https');
+const http  = require('http');
 const { AuthStrategy } = require('./auth-strategy');
 
 class NFCAuthStrategy extends AuthStrategy {
@@ -26,6 +28,21 @@ class NFCAuthStrategy extends AuthStrategy {
     }
 
     start() {
+        // Lazy-load so a missing/uncompiled native addon doesn't crash the
+        // whole process — it just reports a recoverable error instead.
+        let NFC;
+        try {
+            NFC = require('nfc-pcsc').NFC;
+        } catch (e) {
+            const hint = process.platform === 'linux'
+                ? '  Fix: sudo apt-get install pcscd libpcsclite-dev && npm run rebuild'
+                : '  Fix: npm run rebuild';
+            this.emit('error', {
+                message: `NFC module failed to load: ${e.message}.${hint}`,
+            });
+            return;
+        }
+
         try {
             this._nfc = new NFC();
         } catch (e) {

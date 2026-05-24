@@ -3,13 +3,14 @@ name: Build and Release Electron GUI
 on:
   push:
     tags:
-      - 'v*'    # Стартира само при push на тагове, напр. v1.0.0
+      - 'v*'    # triggers on version tags, e.g. v1.0.0
 
 jobs:
   release:
     name: Build and Release GUI on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false   # publish whatever platforms succeed
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
@@ -20,14 +21,28 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
+          cache: npm
+          cache-dependency-path: gui/package-lock.json
 
-      - name: Install dependencies
+      - name: Install pcsclite system libraries (Linux only)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -q && sudo apt-get install -y libpcsclite-dev pcscd
+
+      - name: Install npm dependencies
         run: npm install
         working-directory: ./gui
 
-      - name: Build and Release
+      - name: Rebuild native modules for Electron
+        run: npm run rebuild
+        working-directory: ./gui
+
+      # --publish always → electron-builder uploads the installer to the
+      # GitHub Release created for this tag.  The release must already exist
+      # (create it via `gh release create vX.Y.Z --draft` before pushing the tag)
+      # or set "draft: false" so electron-builder creates it automatically.
+      - name: Build and publish release artifacts
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # GitHub auto предоставя този токен
-        run: npm run build
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --publish always
         working-directory: ./gui
