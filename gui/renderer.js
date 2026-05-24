@@ -1,8 +1,12 @@
 import { updateModuleCard }        from './instruments/module.js?v=2';
 import { isDynamic, upsertDynamicFaceplate } from './instruments/dynamicInstrument.js?v=1';
 import { getDynInstruments, getModules } from './instruments/configManager.js?v=2';
-import { initConfigTab, renderConfigLists } from './config-ui.js?v=3';
+import { initConfigTab, renderConfigLists } from './config-ui.js?v=4';
 import { formatDate }              from './utils/helpers.js?v=2';
+import { initTheme }               from './theme-manager.js?v=1';
+
+// Apply persisted theme before first paint
+initTheme();
 
 const api = window.electronAPI;
 

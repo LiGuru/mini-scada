@@ -11,6 +11,7 @@ import {
     getDynInstruments, saveDynInstruments, upsertDynInstrument, removeDynInstrument,
     getModules, saveModules, upsertModule, removeModule, resetDefaults,
 } from './instruments/configManager.js?v=2';
+import { THEMES, applyTheme, getTheme } from './theme-manager.js?v=1';
 
 const PALETTE = ['#00c896', '#00bcd4', '#f0a500', '#a78bfa', '#f472b6', '#38bdf8', '#fb923c', '#4ade80'];
 
@@ -340,7 +341,32 @@ function _deleteItem(type, key) {
 
 // ── Public init ───────────────────────────────────────────────────
 
+// ── Theme section ─────────────────────────────────────────────────
+
+function _renderThemeGrid() {
+    const grid = document.getElementById('cfgThemeGrid');
+    if (!grid) return;
+    const current = getTheme();
+    grid.innerHTML = THEMES.map(t => `
+        <div class="cfg-theme-card${t.id === current ? ' active' : ''}" data-theme-id="${t.id}">
+            <div class="cfg-theme-swatches">
+                ${t.swatches.map(c => `<div class="cfg-theme-swatch" style="background:${c}"></div>`).join('')}
+            </div>
+            <span class="cfg-theme-name">${t.label}</span>
+        </div>
+    `).join('');
+}
+
 export function initConfigTab() {
+    // Theme grid
+    _renderThemeGrid();
+    document.getElementById('cfgThemeGrid')?.addEventListener('click', e => {
+        const card = e.target.closest('.cfg-theme-card');
+        if (!card) return;
+        applyTheme(card.dataset.themeId);
+        _renderThemeGrid();
+    });
+
     // Connection type radio buttons
     document.querySelectorAll('[name="cfgConnType"]').forEach(r => {
         r.addEventListener('change', () => _updateConnInputs(r.value));

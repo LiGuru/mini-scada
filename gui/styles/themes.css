@@ -1,0 +1,77 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Mini SCADA — Theme definitions
+   All themes set the same CSS custom properties on [data-theme].
+   Switching a theme = setting body[data-theme="..."].
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Dark (default) ──────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:           #0b0e14;
+  --surface:      #111520;
+  --surface2:     #181d2a;
+  --border:       #242b3d;
+  --border2:      #2e3650;
+  --text:         #c8d0e0;
+  --dim:          #5a6480;
+  --head:         #e8edf8;
+  --ok:           #00c896;
+  --warn:         #f0a500;
+  --fault:        #f04040;
+  --accent:       #00bcd4;
+  --ok-bg:        rgba(0,200,150,.09);
+  --warn-bg:      rgba(240,165,0,.09);
+  --fault-bg:     rgba(240,64,64,.09);
+  --ok-border:    rgba(0,200,150,.22);
+  --warn-border:  rgba(240,165,0,.22);
+  --fault-border: rgba(240,64,64,.22);
+  --scrollbar:    #242b3d;
+  --input-bg:     #181d2a;
+}
+
+/* ── Light ───────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg:           #eef1f6;
+  --surface:      #ffffff;
+  --surface2:     #f4f6fa;
+  --border:       #dce1eb;
+  --border2:      #c5ccda;
+  --text:         #1e2333;
+  --dim:          #7a849e;
+  --head:         #0a0d18;
+  --ok:           #00a06e;
+  --warn:         #b07800;
+  --fault:        #cc2a2a;
+  --accent:       #0096b0;
+  --ok-bg:        rgba(0,160,110,.09);
+  --warn-bg:      rgba(176,120,0,.09);
+  --fault-bg:     rgba(204,42,42,.09);
+  --ok-border:    rgba(0,160,110,.25);
+  --warn-border:  rgba(176,120,0,.25);
+  --fault-border: rgba(204,42,42,.25);
+  --scrollbar:    #c5ccda;
+  --input-bg:     #f4f6fa;
+}
+
+/* ── High Contrast ───────────────────────────────────────────────── */
+[data-theme="hc"] {
+  --bg:           #000000;
+  --surface:      #0d0d0d;
+  --surface2:     #1a1a1a;
+  --border:       #555555;
+  --border2:      #888888;
+  --text:         #ffffff;
+  --dim:          #bbbbbb;
+  --head:         #ffffff;
+  --ok:           #00ff99;
+  --warn:         #ffcc00;
+  --fault:        #ff3333;
+  --accent:       #00eeff;
+  --ok-bg:        rgba(0,255,153,.12);
+  --warn-bg:      rgba(255,204,0,.12);
+  --fault-bg:     rgba(255,51,51,.12);
+  --ok-border:    rgba(0,255,153,.45);
+  --warn-border:  rgba(255,204,0,.45);
+  --fault-border: rgba(255,51,51,.45);
+  --scrollbar:    #444444;
+  --input-bg:     #1a1a1a;
+}

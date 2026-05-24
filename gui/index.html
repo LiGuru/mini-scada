@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini SCADA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles/themes.css?v=1">
     <link rel="stylesheet" href="styles/main.css?v=3">
     <link rel="stylesheet" href="styles/instruments.css?v=3">
     <link rel="stylesheet" href="styles/modules.css?v=3">
     <link rel="stylesheet" href="styles/tests.css?v=3">
     <link rel="stylesheet" href="styles/trends.css?v=3">
-    <link rel="stylesheet" href="styles/config.css?v=2">
+    <link rel="stylesheet" href="styles/config.css?v=3">
     <link rel="stylesheet" href="styles/auth.css?v=1">
 </head>
-<body>
+<body data-theme="dark">
 
 <!-- ── TOP BAR ──────────────────────────────────── -->
 <div class="topbar">
@@ -220,6 +221,11 @@
     <div class="config-body">
 
         <div class="cfg-section">
+            <div class="cfg-section-header"><span>Appearance</span></div>
+            <div class="cfg-theme-grid" id="cfgThemeGrid"></div>
+        </div>
+
+        <div class="cfg-section">
             <div class="cfg-section-header">
                 <span>Dynamic Instruments</span>
                 <button class="cfg-add-btn" id="cfgAddInstrBtn">+ Add</button>
@@ -296,6 +302,6 @@
     <div class="alarm-item dim" id="alarmNoFaults"><i class="fas fa-check-circle"></i> No active alarms</div>
 </div>
 
-<script type="module" src="renderer.js?v=12"></script>
+<script type="module" src="renderer.js?v=13"></script>
 </body>
 </html>
