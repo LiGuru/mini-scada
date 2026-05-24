@@ -118,11 +118,21 @@ async function setupRabbit() {
         const conn    = await amqp.connect(RABBIT_URL);
         const channel = await conn.createChannel();
 
+        // Declare all exchanges the GUI depends on — idempotent, matches
+        // the type used by mock_publisher.py and executor.py.
+        // This makes the GUI self-sufficient: it can connect before the
+        // publisher/executor start without crashing on a missing exchange.
+        await channel.assertExchange('instruments',  'direct', { durable: false });
+        await channel.assertExchange('agent_status', 'direct', { durable: false });
+        await channel.assertExchange('results',      'direct', { durable: false });
+
         const qStatus      = await channel.assertQueue(`gui_status.${AGENT_ID}`,      { durable: false });
         const qResults     = await channel.assertQueue(`gui_results.${AGENT_ID}`,     { durable: false });
         const qInstruments = await channel.assertQueue(`gui_instruments.${AGENT_ID}`, { durable: false });
 
-        await channel.bindQueue(qInstruments.queue, 'instruments', `${AGENT_ID}.instruments`);
+        await channel.bindQueue(qStatus.queue,      'agent_status', `${AGENT_ID}.status`);
+        await channel.bindQueue(qResults.queue,     'results',      `${AGENT_ID}.result`);
+        await channel.bindQueue(qInstruments.queue, 'instruments',  `${AGENT_ID}.instruments`);
 
         channel.consume(qStatus.queue, (msg) => {
             if (msg !== null) {
@@ -167,7 +177,7 @@ async function setupRabbit() {
 
 app.whenReady().then(async () => {
     await createWindow();
-    setupRabbit();
+    setupRabbit().catch((err) => log.error('[RabbitMQ] Fatal:', err.message));
     setupNFC();
 });
 
