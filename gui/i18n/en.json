@@ -98,7 +98,7 @@
     "parseError":  "Failed to parse: {name}",
     "remove":      "Remove",
     "clearAll":    "Clear All"
-  }
+  },
   "modal": {
     "addInstr":    "Add Instrument",
     "editInstr":   "Edit Instrument",

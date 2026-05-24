@@ -26,10 +26,10 @@
 .module-tile.fault-tile { border-color: rgba(240,64,64,.4); }
 .module-tile.idle-tile  { opacity: 0.5; }
 
-/* Update flash */
+/* Update flash — uses CSS vars so it adapts to all themes */
 @keyframes tile-flash {
   0%,100% { background: var(--surface); }
-  40%     { background: #001a22; }
+  40%     { background: var(--accent-muted, rgba(0,188,212,.12)); }
 }
 .module-tile.tile-updated { animation: tile-flash 0.5s ease-out; }
 

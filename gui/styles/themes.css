@@ -25,6 +25,7 @@
   --fault-border: rgba(240,64,64,.22);
   --scrollbar:    #242b3d;
   --input-bg:     #181d2a;
+  --accent-muted: rgba(0,188,212,.12);
 }
 
 /* ── Light ───────────────────────────────────────────────────────── */
@@ -49,6 +50,7 @@
   --fault-border: rgba(204,32,32,.25);
   --scrollbar:    #c8d4e8;
   --input-bg:     #f4f7fc;
+  --accent-muted: rgba(0,144,176,.10);
 }
 
 /* ── Paperwhite (Kindle-style warm light) ────────────────────────── */
@@ -73,4 +75,5 @@
   --fault-border: rgba(140,40,40,.28);
   --scrollbar:    #d4c8b0;
   --input-bg:     #f0ebe1;
+  --accent-muted: rgba(26,95,112,.10);
 }

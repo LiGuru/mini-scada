@@ -140,13 +140,16 @@ class TrendChart {
         const range = hi - lo;
 
         // Grid (3 horizontal lines at 25 / 50 / 75 %)
+        // Read --border from the active theme so grid lines adapt to light themes.
+        const gridColor = getComputedStyle(document.body)
+            .getPropertyValue('--border').trim() || '#242b3d';
         this.gridG.innerHTML = '';
         [0.25, 0.5, 0.75].forEach(t => {
             const line = document.createElementNS(NS, 'line');
             line.setAttribute('x1', '0'); line.setAttribute('x2', String(W));
             const y = String(t * H);
             line.setAttribute('y1', y); line.setAttribute('y2', y);
-            line.setAttribute('stroke', '#242b3d');
+            line.setAttribute('stroke', gridColor);
             line.setAttribute('stroke-width', '0.5');
             this.gridG.appendChild(line);
         });
