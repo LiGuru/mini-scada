@@ -30,12 +30,19 @@
     },
     "publish": {
       "provider": "github"
-    }
+    },
+    "asarUnpack": [
+      "**/node_modules/occt-import-js/**",
+      "**/node_modules/@pokusew/pcsclite/**",
+      "**/node_modules/nfc-pcsc/**"
+    ]
   },
   "dependencies": {
     "amqplib": "^0.10.3",
     "dotenv": "^17.4.2",
-    "nfc-pcsc": "^0.8.1"
+    "nfc-pcsc": "^0.8.1",
+    "occt-import-js": "^0.0.23",
+    "three": ">=0.160.0"
   },
   "repository": {
     "type": "git",

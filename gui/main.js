@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, screen } = require('electron');
 const amqp = require('amqplib');
 const path = require('path');
+const fs   = require('fs').promises;
 
 // Load .env from the project root (one level above gui/)
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
@@ -174,6 +175,51 @@ async function setupRabbit() {
         setTimeout(setupRabbit, RECONNECT_MS);
     }
 }
+
+// ── File dialog IPC ──────────────────────────────────────────────
+
+ipcMain.handle('scada:open-project', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+        title:   'Open SCADA Project',
+        filters: [
+            { name: 'SCADA Project', extensions: ['scada'] },
+            { name: 'All Files',     extensions: ['*'] },
+        ],
+        properties: ['openFile'],
+    });
+    if (canceled || !filePaths.length) return null;
+    const filePath = filePaths[0];
+    const text     = await fs.readFile(filePath, 'utf-8');
+    return { path: filePath, data: JSON.parse(text) };
+});
+
+ipcMain.handle('scada:save-project', async (_e, { data, suggestedName }) => {
+    const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+        title:       'Save SCADA Project',
+        defaultPath: suggestedName || 'project.scada',
+        filters:     [{ name: 'SCADA Project', extensions: ['scada'] }],
+    });
+    if (canceled || !filePath) return null;
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    return filePath;
+});
+
+ipcMain.handle('scada:open-step', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+        title:   'Load STEP / IGES File',
+        filters: [
+            { name: 'CAD Files',  extensions: ['step', 'stp', 'iges', 'igs'] },
+            { name: 'All Files',  extensions: ['*'] },
+        ],
+        properties: ['openFile'],
+    });
+    if (canceled || !filePaths.length) return null;
+    const filePath = filePaths[0];
+    const buf      = await fs.readFile(filePath);
+    // Extract a properly-owned ArrayBuffer slice (Buffer.buffer may be a pool)
+    const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+    return { name: path.basename(filePath), path: filePath, buffer: ab };
+});
 
 app.whenReady().then(async () => {
     await createWindow();

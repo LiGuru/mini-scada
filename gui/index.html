@@ -13,6 +13,20 @@
     <link rel="stylesheet" href="styles/trends.css?v=3">
     <link rel="stylesheet" href="styles/config.css?v=3">
     <link rel="stylesheet" href="styles/auth.css?v=1">
+    <link rel="stylesheet" href="styles/models.css?v=1">
+
+    <!-- Three.js importmap — maps bare specifiers for ES module renderer -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three":          "./node_modules/three/build/three.module.js",
+        "three/addons/":  "./node_modules/three/examples/jsm/"
+      }
+    }
+    </script>
+
+    <!-- occt-import-js: WASM-based STEP/IGES parser (UMD → window.occtimportjs) -->
+    <script src="./node_modules/occt-import-js/dist/occt-import-js.js"></script>
 </head>
 <body data-theme="industrial">
 
@@ -24,6 +38,7 @@
         <div class="nav-tab active" id="tab-live"    data-i18n="nav.live">Live View</div>
         <div class="nav-tab"        id="tab-trends"  data-i18n="nav.trends">Trends</div>
         <div class="nav-tab"        id="tab-testlog" data-i18n="nav.testlog">Test Log</div>
+        <div class="nav-tab"        id="tab-models"  data-i18n="nav.models">Models</div>
         <div class="nav-tab"        id="tab-config"  data-i18n="nav.config">Config</div>
     </div>
 
@@ -200,11 +215,43 @@
     </div>
 </div>
 
+<!-- ── MODELS VIEW ──────────────────────────────────────────────── -->
+<div class="view-panel" id="view-models" style="display:none">
+    <div class="models-layout">
+
+        <div class="models-sidebar">
+            <div class="models-toolbar">
+                <span class="models-sidebar-title" data-i18n="models.title">3D Models</span>
+                <button id="modelsLoadBtn" data-i18n="models.load">Load STEP…</button>
+            </div>
+            <div id="modelsList" class="models-list">
+                <div class="models-empty" data-i18n="models.empty">No models loaded</div>
+            </div>
+            <div class="models-footer">
+                <div id="modelsStatus" class="models-status"></div>
+                <button id="modelsClearBtn" class="models-clear-btn" data-i18n="models.clearAll">Clear All</button>
+            </div>
+        </div>
+
+        <div id="models-canvas-wrap" class="models-canvas-wrap">
+            <div id="modelsLoading" style="display:none">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span data-i18n="models.loading">Parsing…</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <!-- ── CONFIG VIEW ───────────────────────────────────── -->
 <div class="view-panel" id="view-config" style="display:none">
     <div class="config-toolbar">
         <strong data-i18n="config.title">Configuration</strong>
         <span data-i18n="config.subtitle">Instruments and modules — changes save automatically to browser storage</span>
+        <div class="cfg-project-btns">
+            <button id="cfgOpenProjectBtn" data-i18n="config.openProject">Open Project</button>
+            <button id="cfgSaveProjectBtn" data-i18n="config.saveProject">Save Project</button>
+        </div>
         <button id="cfgResetBtn" data-i18n="config.reset">Reset to defaults</button>
     </div>
     <div class="config-body">
@@ -296,6 +343,6 @@
     <div class="alarm-item dim" id="alarmNoFaults"><i class="fas fa-check-circle"></i> <span data-i18n="alarm.noAlarms">No active alarms</span></div>
 </div>
 
-<script type="module" src="renderer.js?v=14"></script>
+<script type="module" src="renderer.js?v=15"></script>
 </body>
 </html>

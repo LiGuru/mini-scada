@@ -5,6 +5,13 @@ import { initConfigTab, renderConfigLists } from './config-ui.js?v=4';
 import { formatDate }              from './utils/helpers.js?v=2';
 import { initTheme }               from './theme-manager.js?v=1';
 import { initI18n, t, applyI18n } from './i18n.js?v=1';
+import { exportProject, importProject } from './project/project-manager.js';
+import {
+    initModelsView,
+    loadStepBuffer,
+    clearModels,
+    getModels,
+} from './views/models-view.js';
 
 // Apply theme immediately (sync, no flash)
 initTheme();
@@ -368,6 +375,7 @@ function initTabs() {
         { tabId: 'tab-live',    viewId: 'view-live',    onShow: null },
         { tabId: 'tab-trends',  viewId: 'view-trends',  onShow: renderAllTrends },
         { tabId: 'tab-testlog', viewId: 'view-testlog', onShow: renderTestLog },
+        { tabId: 'tab-models',  viewId: 'view-models',  onShow: initModelsView },
         { tabId: 'tab-config',  viewId: 'view-config',  onShow: renderConfigLists },
     ];
 
@@ -660,9 +668,11 @@ function _setAuth(authenticated, operator) {
 }
 
 function _applyWriteLocks() {
-    // Write-protected elements: config add/edit buttons, reset button.
-    // More controls can be added here as the system grows.
-    const writeSelectors = ['#cfgAddInstrBtn', '#cfgAddModBtn', '#cfgResetBtn'];
+    // Write-protected elements: config add/edit/reset buttons, project buttons.
+    const writeSelectors = [
+        '#cfgAddInstrBtn', '#cfgAddModBtn', '#cfgResetBtn',
+        '#cfgOpenProjectBtn', '#cfgSaveProjectBtn',
+    ];
     for (const sel of writeSelectors) {
         const el = document.querySelector(sel);
         if (!el) continue;
@@ -704,6 +714,94 @@ function onMeasurement(result) {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// TOAST NOTIFICATION
+// ══════════════════════════════════════════════════════════════════
+
+let _toastTimer = null;
+function showToast(msg, kind = 'ok') {
+    let el = document.getElementById('scadaToast');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'scadaToast';
+        el.className = 'scada-toast';
+        document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.className   = `scada-toast ${kind} visible`;
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => el.classList.remove('visible'), 3000);
+}
+
+// ══════════════════════════════════════════════════════════════════
+// PROJECT SAVE / LOAD
+// ══════════════════════════════════════════════════════════════════
+
+let _currentProjectPath = null;
+
+function initProjectButtons() {
+    const openBtn = document.getElementById('cfgOpenProjectBtn');
+    const saveBtn = document.getElementById('cfgSaveProjectBtn');
+
+    openBtn?.addEventListener('click', async () => {
+        if (!api?.openProject) return;
+        try {
+            const result = await api.openProject();
+            if (!result) return;  // cancelled
+
+            const { models } = await importProject(result.data);
+            renderConfigLists();   // refresh config tab lists
+
+            // Re-load any 3D models listed in the project
+            clearModels();
+            for (const m of models) {
+                // We can't re-read the file from the renderer — request main process
+                if (!api?.openStep || !m.path) continue;
+                try {
+                    const stepResult = await window.electronAPI.invoke?.('scada:read-file', m.path);
+                    if (stepResult?.buffer) await loadStepBuffer(m.name, stepResult.buffer, m.path);
+                } catch { /* file might have moved — skip silently */ }
+            }
+
+            _currentProjectPath = result.path;
+            const name = result.path.split(/[/\\]/).pop();
+            showToast(t('project.opened', { name }), 'ok');
+        } catch (err) {
+            showToast(t('project.loadError', { msg: err.message }), 'error');
+        }
+    });
+
+    saveBtn?.addEventListener('click', async () => {
+        if (!api?.saveProject) return;
+        try {
+            const data = exportProject(getModels());
+            const suggestedName = _currentProjectPath
+                || 'project.scada';
+            const savedPath = await api.saveProject(data, suggestedName);
+            if (!savedPath) return;  // cancelled
+            _currentProjectPath = savedPath;
+            showToast(t('project.saved', { path: savedPath.split(/[/\\]/).pop() }), 'ok');
+        } catch (err) {
+            showToast(t('project.saveError', { msg: err.message }), 'error');
+        }
+    });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MODELS VIEW BUTTONS
+// ══════════════════════════════════════════════════════════════════
+
+function initModelButtons() {
+    document.getElementById('modelsLoadBtn')?.addEventListener('click', async () => {
+        const { loadStep } = await import('./views/models-view.js');
+        await loadStep();
+    });
+
+    document.getElementById('modelsClearBtn')?.addEventListener('click', () => {
+        clearModels();
+    });
+}
+
+// ══════════════════════════════════════════════════════════════════
 // BOOT
 // ══════════════════════════════════════════════════════════════════
 
@@ -717,6 +815,9 @@ api.onStatus(onStatus);
 api.onInstruments(onInstruments);
 api.onMeasurement(onMeasurement);
 if (api.onAuth) api.onAuth(onAuth);
+
+initProjectButtons();
+initModelButtons();
 
 // Apply initial write locks (no reader = not authenticated)
 _applyWriteLocks();

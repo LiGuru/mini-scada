@@ -3,7 +3,8 @@
     "live":    "Live View",
     "trends":  "Trends",
     "testlog": "Test Log",
-    "config":  "Config"
+    "config":  "Config",
+    "models":  "Models"
   },
   "broker": {
     "ok":            "BROKER OK",
@@ -67,16 +68,37 @@
     "modules": "Modules"
   },
   "config": {
-    "title":      "Configuration",
-    "subtitle":   "Instruments and modules — changes save automatically to browser storage",
-    "reset":      "Reset to defaults",
-    "appearance": "Appearance",
-    "language":   "Language",
-    "instr":      "Dynamic Instruments",
-    "modules":    "Modules",
-    "add":        "+ Add",
+    "title":        "Configuration",
+    "subtitle":     "Instruments and modules — changes save automatically to browser storage",
+    "reset":        "Reset to defaults",
+    "appearance":   "Appearance",
+    "language":     "Language",
+    "instr":        "Dynamic Instruments",
+    "modules":      "Modules",
+    "add":          "+ Add",
+    "openProject":  "Open Project",
+    "saveProject":  "Save Project",
     "resetConfirm": "Reset all instruments and modules to factory defaults?\n\nAll custom entries will be removed. This cannot be undone."
   },
+  "project": {
+    "saved":      "Saved: {path}",
+    "opened":     "Opened: {name}",
+    "error":      "Project error: {msg}",
+    "saveError":  "Could not save project: {msg}",
+    "loadError":  "Could not load project: {msg}",
+    "invalid":    "Not a valid .scada file"
+  },
+  "models": {
+    "title":       "3D Models",
+    "load":        "Load STEP…",
+    "empty":       "No models loaded",
+    "loading":     "Parsing…",
+    "wasmInit":    "Initialising OCCT engine…",
+    "wasmFail":    "OCCT engine failed to load",
+    "parseError":  "Failed to parse: {name}",
+    "remove":      "Remove",
+    "clearAll":    "Clear All"
+  }
   "modal": {
     "addInstr":    "Add Instrument",
     "editInstr":   "Edit Instrument",
