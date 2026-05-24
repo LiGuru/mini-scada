@@ -1,11 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════════
    Mini SCADA — Theme definitions
-   All themes set the same CSS custom properties on [data-theme].
-   Switching a theme = setting body[data-theme="..."].
+   Applied via body[data-theme="..."]
    ═══════════════════════════════════════════════════════════════════ */
 
-/* ── Dark (default) ──────────────────────────────────────────────── */
-[data-theme="dark"] {
+/* ── Industrial (default dark) ───────────────────────────────────── */
+[data-theme="industrial"] {
   --bg:           #0b0e14;
   --surface:      #111520;
   --surface2:     #181d2a;
@@ -30,48 +29,48 @@
 
 /* ── Light ───────────────────────────────────────────────────────── */
 [data-theme="light"] {
-  --bg:           #eef1f6;
+  --bg:           #eef2f8;
   --surface:      #ffffff;
-  --surface2:     #f4f6fa;
-  --border:       #dce1eb;
-  --border2:      #c5ccda;
-  --text:         #1e2333;
-  --dim:          #7a849e;
-  --head:         #0a0d18;
-  --ok:           #00a06e;
-  --warn:         #b07800;
-  --fault:        #cc2a2a;
-  --accent:       #0096b0;
-  --ok-bg:        rgba(0,160,110,.09);
-  --warn-bg:      rgba(176,120,0,.09);
-  --fault-bg:     rgba(204,42,42,.09);
-  --ok-border:    rgba(0,160,110,.25);
-  --warn-border:  rgba(176,120,0,.25);
-  --fault-border: rgba(204,42,42,.25);
-  --scrollbar:    #c5ccda;
-  --input-bg:     #f4f6fa;
+  --surface2:     #e8eef8;
+  --border:       #c8d4e8;
+  --border2:      #a8bcd8;
+  --text:         #1a2030;
+  --dim:          #6070a0;
+  --head:         #08101e;
+  --ok:           #00906a;
+  --warn:         #b07200;
+  --fault:        #cc2020;
+  --accent:       #0090b0;
+  --ok-bg:        rgba(0,144,106,.08);
+  --warn-bg:      rgba(176,114,0,.08);
+  --fault-bg:     rgba(204,32,32,.08);
+  --ok-border:    rgba(0,144,106,.25);
+  --warn-border:  rgba(176,114,0,.25);
+  --fault-border: rgba(204,32,32,.25);
+  --scrollbar:    #c8d4e8;
+  --input-bg:     #f4f7fc;
 }
 
-/* ── High Contrast ───────────────────────────────────────────────── */
-[data-theme="hc"] {
-  --bg:           #000000;
-  --surface:      #0d0d0d;
-  --surface2:     #1a1a1a;
-  --border:       #555555;
-  --border2:      #888888;
-  --text:         #ffffff;
-  --dim:          #bbbbbb;
-  --head:         #ffffff;
-  --ok:           #00ff99;
-  --warn:         #ffcc00;
-  --fault:        #ff3333;
-  --accent:       #00eeff;
-  --ok-bg:        rgba(0,255,153,.12);
-  --warn-bg:      rgba(255,204,0,.12);
-  --fault-bg:     rgba(255,51,51,.12);
-  --ok-border:    rgba(0,255,153,.45);
-  --warn-border:  rgba(255,204,0,.45);
-  --fault-border: rgba(255,51,51,.45);
-  --scrollbar:    #444444;
-  --input-bg:     #1a1a1a;
+/* ── Paperwhite (Kindle-style warm light) ────────────────────────── */
+[data-theme="paperwhite"] {
+  --bg:           #f5f0e8;
+  --surface:      #faf7f2;
+  --surface2:     #ede8de;
+  --border:       #d4c8b0;
+  --border2:      #b8a890;
+  --text:         #2a2018;
+  --dim:          #8a7060;
+  --head:         #160e06;
+  --ok:           #3d6b50;
+  --warn:         #8a6010;
+  --fault:        #8c2828;
+  --accent:       #1a5f70;
+  --ok-bg:        rgba(61,107,80,.10);
+  --warn-bg:      rgba(138,96,16,.10);
+  --fault-bg:     rgba(140,40,40,.10);
+  --ok-border:    rgba(61,107,80,.28);
+  --warn-border:  rgba(138,96,16,.28);
+  --fault-border: rgba(140,40,40,.28);
+  --scrollbar:    #d4c8b0;
+  --input-bg:     #f0ebe1;
 }

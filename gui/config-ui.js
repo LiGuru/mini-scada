@@ -12,7 +12,7 @@ import {
     getModules, saveModules, upsertModule, removeModule, resetDefaults,
 } from './instruments/configManager.js?v=2';
 import { THEMES, applyTheme, getTheme } from './theme-manager.js?v=1';
-import { LANGS, setLang, getLang }       from './i18n.js?v=1';
+import { LANGS, setLang, getLang, t }    from './i18n.js?v=1';
 
 const PALETTE = ['#00c896', '#00bcd4', '#f0a500', '#a78bfa', '#f472b6', '#38bdf8', '#fb923c', '#4ade80'];
 
@@ -348,12 +348,12 @@ function _renderThemeGrid() {
     const grid = document.getElementById('cfgThemeGrid');
     if (!grid) return;
     const current = getTheme();
-    grid.innerHTML = THEMES.map(t => `
-        <div class="cfg-theme-card${t.id === current ? ' active' : ''}" data-theme-id="${t.id}">
+    grid.innerHTML = THEMES.map(theme => `
+        <div class="cfg-theme-card${theme.id === current ? ' active' : ''}" data-theme-id="${theme.id}">
             <div class="cfg-theme-swatches">
-                ${t.swatches.map(c => `<div class="cfg-theme-swatch" style="background:${c}"></div>`).join('')}
+                ${theme.swatches.map(c => `<div class="cfg-theme-swatch" style="background:${c}"></div>`).join('')}
             </div>
-            <span class="cfg-theme-name">${t.label}</span>
+            <span class="cfg-theme-name">${t('themes.' + theme.id) || theme.label}</span>
         </div>
     `).join('');
 }

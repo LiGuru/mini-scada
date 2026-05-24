@@ -107,5 +107,10 @@
     "notAuthed":   "Not authenticated",
     "tapBadge":    "Tap badge to authenticate",
     "errPrefix":   "Auth error: "
+  },
+  "themes": {
+    "industrial":  "Industrial",
+    "light":       "Light",
+    "paperwhite":  "Paperwhite"
   }
 }
