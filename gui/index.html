@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini SCADA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="styles/themes.css?v=1">
+    <link rel="stylesheet" href="styles/themes.css?v=3">
     <link rel="stylesheet" href="styles/main.css?v=3">
     <link rel="stylesheet" href="styles/instruments.css?v=3">
     <link rel="stylesheet" href="styles/modules.css?v=3">
@@ -14,13 +14,22 @@
     <link rel="stylesheet" href="styles/config.css?v=3">
     <link rel="stylesheet" href="styles/auth.css?v=1">
     <link rel="stylesheet" href="styles/models.css?v=1">
+    <link rel="stylesheet" href="styles/pcb-view.css?v=1">
+    <link rel="stylesheet" href="styles/instr-control.css?v=2">
+    <link rel="stylesheet" href="styles/instr-panel.css?v=4">
+    <link rel="stylesheet" href="./node_modules/altium-toolkit/src/styles/altium-renderers.css">
 
-    <!-- Three.js importmap — maps bare specifiers for ES module renderer -->
+    <!-- Import map — bare specifiers for ES module renderer -->
     <script type="importmap">
     {
       "imports": {
-        "three":          "./node_modules/three/build/three.module.js",
-        "three/addons/":  "./node_modules/three/examples/jsm/"
+        "three":                   "./node_modules/three/build/three.module.js",
+        "three/addons/":           "./node_modules/three/examples/jsm/",
+        "fflate":                  "./node_modules/fflate/esm/browser.js",
+        "altium-toolkit":          "./node_modules/altium-toolkit/src/index.mjs",
+        "altium-toolkit/parser":   "./node_modules/altium-toolkit/src/parser.mjs",
+        "altium-toolkit/renderers":"./node_modules/altium-toolkit/src/renderers.mjs",
+        "altium-toolkit/scene3d":  "./node_modules/altium-toolkit/src/scene3d.mjs"
       }
     }
     </script>
@@ -39,8 +48,15 @@
         <div class="nav-tab"        id="tab-trends"  data-i18n="nav.trends">Trends</div>
         <div class="nav-tab"        id="tab-testlog" data-i18n="nav.testlog">Test Log</div>
         <div class="nav-tab"        id="tab-models"  data-i18n="nav.models">Models</div>
+        <div class="nav-tab"        id="tab-pcb"     data-i18n="nav.pcb">PCB / SCH</div>
         <div class="nav-tab"        id="tab-config"  data-i18n="nav.config">Config</div>
     </div>
+
+    <button class="ic-toggle-btn" id="icToggleBtn" title="Instrument Control">
+        <i class="fas fa-sliders-h"></i>
+        <span data-i18n="nav.instruments">Instruments</span>
+        <span class="ic-badge" id="icToggleBadge" style="display:none">0</span>
+    </button>
 
     <div class="topbar-status">
         <div class="status-pill dim" id="brokerStatusPill">
@@ -243,6 +259,40 @@
     </div>
 </div>
 
+<!-- ── PCB / SCHEMATIC VIEW ─────────────────────────────────────── -->
+<div class="view-panel" id="view-pcb" style="display:none">
+
+    <div class="pcb-toolbar">
+        <span class="pcb-toolbar-title" data-i18n="pcb.title">PCB / Schematic</span>
+        <span id="pcbFileName" class="pcb-filename"></span>
+
+        <div id="pcbLoading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span data-i18n="pcb.loading">Parsing…</span>
+        </div>
+
+        <span id="pcbStatus" class="pcb-status"></span>
+        <button id="pcbFreeCADBtn" data-i18n="pcb.freecadConvert">Convert 3D with FreeCAD</button>
+        <button id="pcbClearBtn" style="display:none" data-i18n="pcb.clearAll">Close</button>
+        <button id="pcbLoadBtn" data-i18n="pcb.load">Load Altium File…</button>
+    </div>
+
+    <div class="pcb-tabs">
+        <button class="pcb-tab-btn active" id="pcbTab-svg">SVG</button>
+        <button class="pcb-tab-btn" id="pcbTab-bom" data-i18n="pcb.bom">BOM</button>
+        <button class="pcb-tab-btn" id="pcbTab-summary" data-i18n="pcb.summary">Summary</button>
+    </div>
+
+    <div class="pcb-content">
+        <div id="pcbPanel-svg" class="pcb-panel">
+            <div class="pcb-empty" data-i18n="pcb.empty">No file loaded</div>
+        </div>
+        <div id="pcbPanel-bom" class="pcb-panel" style="display:none"></div>
+        <div id="pcbPanel-summary" class="pcb-panel" style="display:none"></div>
+    </div>
+
+</div>
+
 <!-- ── CONFIG VIEW ───────────────────────────────────── -->
 <div class="view-panel" id="view-config" style="display:none">
     <div class="config-toolbar">
@@ -282,6 +332,25 @@
             <div class="cfg-list" id="cfgModList"></div>
         </div>
 
+    </div>
+</div>
+
+<!-- ── FLOATING INSTRUMENT PANELS container ──────── -->
+<div id="ipContainer"></div>
+
+<!-- ── INSTRUMENT CONTROL DRAWER ─────────────────── -->
+<div class="ic-backdrop" id="icBackdrop"></div>
+<div class="ic-drawer" id="icDrawer">
+    <div class="ic-drawer-header">
+        <span class="ic-drawer-title" data-i18n="nav.instruments">Instruments</span>
+        <button class="ic-drawer-close" id="icDrawerClose">&times;</button>
+    </div>
+    <div class="ic-drawer-body" id="icDrawerBody">
+        <div class="ic-empty">
+            <i class="fas fa-satellite-dish"></i>
+            <span>No instrument runners detected</span>
+            <span style="font-size:11px;opacity:.6">Start instr_runner.py to connect instruments</span>
+        </div>
     </div>
 </div>
 
@@ -343,6 +412,6 @@
     <div class="alarm-item dim" id="alarmNoFaults"><i class="fas fa-check-circle"></i> <span data-i18n="alarm.noAlarms">No active alarms</span></div>
 </div>
 
-<script type="module" src="renderer.js?v=15"></script>
+<script type="module" src="renderer.js?v=17"></script>
 </body>
 </html>

@@ -1,10 +1,12 @@
 {
   "nav": {
-    "live":    "Live View",
-    "trends":  "Trends",
-    "testlog": "Test Log",
-    "config":  "Config",
-    "models":  "Models"
+    "live":        "Live View",
+    "trends":      "Trends",
+    "testlog":     "Test Log",
+    "config":      "Config",
+    "models":      "Models",
+    "pcb":         "PCB / SCH",
+    "instruments": "Instruments"
   },
   "broker": {
     "ok":            "BROKER OK",
@@ -129,6 +131,28 @@
     "notAuthed":   "Not authenticated",
     "tapBadge":    "Tap badge to authenticate",
     "errPrefix":   "Auth error: "
+  },
+  "pcb": {
+    "title":          "PCB / Schematic",
+    "load":           "Load Altium File…",
+    "empty":          "No file loaded",
+    "loading":        "Parsing…",
+    "parseError":     "Failed to parse: {name}",
+    "clearAll":       "Close",
+    "bom":            "Bill of Materials",
+    "summary":        "Summary",
+    "layers":         "Layers",
+    "nets":           "Nets",
+    "components":     "Components",
+    "boardSize":      "Board size",
+    "freecadConvert": "Convert 3D with FreeCAD"
+  },
+  "freecad": {
+    "notFound":   "FreeCAD not found — install FreeCAD to enable 3D conversion",
+    "found":      "FreeCAD found: {path}",
+    "converting": "Converting with FreeCAD…",
+    "convertOk":  "3D model loaded",
+    "convertFail":"FreeCAD conversion failed: {msg}"
   },
   "themes": {
     "industrial":  "Industrial",

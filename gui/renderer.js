@@ -12,6 +12,13 @@ import {
     clearModels,
     getModels,
 } from './views/models-view.js';
+import {
+    initPcbView,
+    loadAltiumBuffer,
+    clearPcb,
+} from './views/pcb-view.js';
+import { initInstrControl } from './views/instr-control.js';
+import { initInstrPanels }  from './views/instr-panel.js';
 
 // Apply theme immediately (sync, no flash)
 initTheme();
@@ -379,6 +386,7 @@ function initTabs() {
         { tabId: 'tab-trends',  viewId: 'view-trends',  onShow: renderAllTrends },
         { tabId: 'tab-testlog', viewId: 'view-testlog', onShow: renderTestLog },
         { tabId: 'tab-models',  viewId: 'view-models',  onShow: initModelsView },
+        { tabId: 'tab-pcb',     viewId: 'view-pcb',     onShow: initPcbView },
         { tabId: 'tab-config',  viewId: 'view-config',  onShow: renderConfigLists },
     ];
 
@@ -805,6 +813,19 @@ function initModelButtons() {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// PCB VIEW BUTTONS
+// ══════════════════════════════════════════════════════════════════
+
+function initPcbButtons() {
+    document.getElementById('pcbLoadBtn')?.addEventListener('click', async () => {
+        if (!api?.openAltium) return;
+        const result = await api.openAltium();
+        if (!result) return;  // cancelled
+        await loadAltiumBuffer(result.name, result.buffer, result.path);
+    });
+}
+
+// ══════════════════════════════════════════════════════════════════
 // BOOT
 // ══════════════════════════════════════════════════════════════════
 
@@ -814,6 +835,9 @@ initTestLog();
 initConfigTab();
 
 api.onBrokerStatus(onBrokerStatus);
+// Pull the cached status once — avoids staying on 'connecting' when the
+// broker connected before this listener was registered (fast-connect race).
+api.getBrokerStatus?.().then(s => { if (s) onBrokerStatus(s); });
 api.onStatus(onStatus);
 api.onInstruments(onInstruments);
 api.onMeasurement(onMeasurement);
@@ -821,6 +845,9 @@ if (api.onAuth) api.onAuth(onAuth);
 
 initProjectButtons();
 initModelButtons();
+initPcbButtons();
+initInstrPanels();
+initInstrControl();
 
 // Apply initial write locks (no reader = not authenticated)
 _applyWriteLocks();

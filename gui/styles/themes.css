@@ -5,6 +5,36 @@
 
 /* ── Industrial (default dark) ───────────────────────────────────── */
 [data-theme="industrial"] {
+  /* Instrument panel */
+  --ip-panel-bg:       #191d21;
+  --ip-header-bg:      #1e2428;
+  --ip-shadow:         0 16px 48px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.04), inset 0 1px 0 rgba(255,255,255,.06);
+  --ip-ctrl-row-bg:    rgba(0,0,0,.22);
+  --ip-btn-bg:         #2a3038;
+  --ip-btn-border:     #404850;
+  --ip-btn-color:      #a8bcc8;
+  --ip-btn-hover-bg:   #3a4452;
+  --ip-btn-hover-color:#d0e4f4;
+  --ip-btn-active-bg:  #1e262e;
+  --ip-on-bg:          #162a1e;
+  --ip-on-border:      #1a5a2a;
+  --ip-on-color:       #3ddc84;
+  --ip-off-bg:         #2a1616;
+  --ip-off-border:     #5a1a1a;
+  --ip-off-color:      #ff6060;
+  --ip-locked-overlay: rgba(10,13,16,.55);
+  --ip-display-bg:          #0a0d10;
+  --ip-display-tile-bg:     rgba(0,0,0,.30);
+  --ip-display-tile-border: #1a2028;
+  --ip-display-placeholder: #2a3a4a;
+  --ip-tile-value:          #ffaa00;
+  --ip-tile-value-shadow:   rgba(255,170,0,.50);
+  --ip-tile-label:          #304858;
+  --ip-tile-unit:           #7a6030;
+  --ip-tile-on:             #3ddc84;
+  --ip-tile-on-shadow:      rgba(61,220,132,.50);
+  --ip-tile-off:            #2a3040;
+  --ip-tile-str:            #88aac0;
   --bg:           #0b0e14;
   --surface:      #111520;
   --surface2:     #181d2a;
@@ -30,6 +60,36 @@
 
 /* ── Light ───────────────────────────────────────────────────────── */
 [data-theme="light"] {
+  /* Instrument panel */
+  --ip-panel-bg:       #f4f7fc;
+  --ip-header-bg:      #e8edf8;
+  --ip-shadow:         0 8px 28px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.06);
+  --ip-ctrl-row-bg:    rgba(0,0,0,.04);
+  --ip-btn-bg:         #dde4f2;
+  --ip-btn-border:     #b4c4dc;
+  --ip-btn-color:      #2a3a58;
+  --ip-btn-hover-bg:   #c8d4e8;
+  --ip-btn-hover-color:#0a1a38;
+  --ip-btn-active-bg:  #c0cce0;
+  --ip-on-bg:          #d8f0e4;
+  --ip-on-border:      #70b890;
+  --ip-on-color:       #007a50;
+  --ip-off-bg:         #f8dede;
+  --ip-off-border:     #d09090;
+  --ip-off-color:      #b01818;
+  --ip-locked-overlay: rgba(244,247,252,.58);
+  --ip-display-bg:          #dce4f0;
+  --ip-display-tile-bg:     rgba(0,0,0,.04);
+  --ip-display-tile-border: #b8c8dc;
+  --ip-display-placeholder: #90a0b8;
+  --ip-tile-value:          #005a8a;
+  --ip-tile-value-shadow:   transparent;
+  --ip-tile-label:          #6080a0;
+  --ip-tile-unit:           #7890a8;
+  --ip-tile-on:             #007a50;
+  --ip-tile-on-shadow:      transparent;
+  --ip-tile-off:            #9090a8;
+  --ip-tile-str:            #3060a0;
   --bg:           #eef2f8;
   --surface:      #ffffff;
   --surface2:     #e8eef8;
@@ -55,6 +115,36 @@
 
 /* ── Paperwhite (Kindle-style warm light) ────────────────────────── */
 [data-theme="paperwhite"] {
+  /* Instrument panel */
+  --ip-panel-bg:       #f8f4ec;
+  --ip-header-bg:      #ede8de;
+  --ip-shadow:         0 8px 28px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.06);
+  --ip-ctrl-row-bg:    rgba(0,0,0,.04);
+  --ip-btn-bg:         #e0d8c8;
+  --ip-btn-border:     #b8a890;
+  --ip-btn-color:      #2a1e10;
+  --ip-btn-hover-bg:   #ccc4b4;
+  --ip-btn-hover-color:#160e04;
+  --ip-btn-active-bg:  #c4bcac;
+  --ip-on-bg:          #d8ece0;
+  --ip-on-border:      #80a888;
+  --ip-on-color:       #2a5a38;
+  --ip-off-bg:         #f0dcd8;
+  --ip-off-border:     #c0948a;
+  --ip-off-color:      #7a2020;
+  --ip-locked-overlay: rgba(248,244,236,.58);
+  --ip-display-bg:          #e4ddd0;
+  --ip-display-tile-bg:     rgba(0,0,0,.04);
+  --ip-display-tile-border: #c4b4a0;
+  --ip-display-placeholder: #a89080;
+  --ip-tile-value:          #3a2810;
+  --ip-tile-value-shadow:   transparent;
+  --ip-tile-label:          #8a7060;
+  --ip-tile-unit:           #9a8070;
+  --ip-tile-on:             #2a5a38;
+  --ip-tile-on-shadow:      transparent;
+  --ip-tile-off:            #b0a090;
+  --ip-tile-str:            #4a5070;
   --bg:           #f5f0e8;
   --surface:      #faf7f2;
   --surface2:     #ede8de;

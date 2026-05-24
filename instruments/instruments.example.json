@@ -1,0 +1,48 @@
+{
+  "agent_id": "bench-01",
+  "amqp_url": "amqp://guest:guest@localhost:5672/",
+  "instruments": [
+    {
+      "id": "psu1",
+      "driver": "power_supply",
+      "resource": "GPIB0::5::INSTR",
+      "mock": false
+    },
+    {
+      "id": "dmm1",
+      "driver": "dmm",
+      "resource": "USB0::0x2A8D::0x1301::MY12345678::INSTR",
+      "mock": false
+    },
+    {
+      "id": "scope1",
+      "driver": "oscilloscope",
+      "resource": "USB0::0x2A8D::0x1797::CN59301234::INSTR",
+      "mock": false
+    },
+    {
+      "id": "sa1",
+      "driver": "spectrum_analyzer",
+      "resource": "GPIB0::18::INSTR",
+      "mock": false
+    },
+    {
+      "id": "load1",
+      "driver": "load",
+      "resource": "GPIB0::10::INSTR",
+      "mock": false
+    },
+    {
+      "id": "rfgen1",
+      "driver": "rf_generator",
+      "resource": "GPIB0::19::INSTR",
+      "mock": false
+    },
+    {
+      "id": "psu_mock",
+      "driver": "power_supply",
+      "resource": "MOCK",
+      "mock": true
+    }
+  ]
+}

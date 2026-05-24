@@ -1,10 +1,12 @@
 {
   "nav": {
-    "live":    "Живо",
-    "trends":  "Графики",
-    "testlog": "Тест лог",
-    "config":  "Настройки",
-    "models":  "Модели"
+    "live":        "Живо",
+    "trends":      "Графики",
+    "testlog":     "Тест лог",
+    "config":      "Настройки",
+    "models":      "Модели",
+    "pcb":         "ПХП / Схема",
+    "instruments": "Инструменти"
   },
   "broker": {
     "ok":           "БРОКЕР ОК",
@@ -129,6 +131,28 @@
     "notAuthed": "Не е автентикиран",
     "tapBadge":  "Поднесете карта за автентикация",
     "errPrefix": "Грешка при автентикация: "
+  },
+  "pcb": {
+    "title":          "ПХП / Схема",
+    "load":           "Зареди Altium файл…",
+    "empty":          "Няма зареден файл",
+    "loading":        "Обработване…",
+    "parseError":     "Грешка при четене: {name}",
+    "clearAll":       "Затвори",
+    "bom":            "Спецификация",
+    "summary":        "Обобщение",
+    "layers":         "Слоеве",
+    "nets":           "Вериги",
+    "components":     "Компоненти",
+    "boardSize":      "Размер на платка",
+    "freecadConvert": "3D конвертиране с FreeCAD"
+  },
+  "freecad": {
+    "notFound":   "FreeCAD не е намерен — инсталирайте FreeCAD за 3D конвертиране",
+    "found":      "FreeCAD намерен: {path}",
+    "converting": "Конвертиране с FreeCAD…",
+    "convertOk":  "3D моделът е зареден",
+    "convertFail":"FreeCAD конвертирането неуспешно: {msg}"
   },
   "themes": {
     "industrial":  "Индустриална",

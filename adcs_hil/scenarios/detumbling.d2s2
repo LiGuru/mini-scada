@@ -1,0 +1,30 @@
+meta:
+  name: detumbling
+  description: >
+    Post-separation detumbling phase.
+    CubeADCS applies B-dot control to damp angular rates.
+  adcs_model: cubeadcs_gen2
+
+mode: physics
+
+physics:
+  initial_quaternion: [0.9239, 0.3827, 0.0, 0.0]   # 45° roll at separation
+  initial_omega_rps:  [0.08, -0.05, 0.12]            # typical post-sep tumble
+  initial_rw_rpm:     [0, 0, 0, 0]
+  inertia_kg_m2:
+    Ixx: 0.10
+    Iyy: 0.20
+    Izz: 0.15
+  rw_axis_matrix:
+    - [1.0, 0.0, 0.0]
+    - [0.0, 1.0, 0.0]
+    - [0.0, 0.0, 1.0]
+    - [0.577, 0.577, 0.577]   # skew wheel
+  b_field_body_ut: [23.4, -15.2, 42.1]    # representative LEO field strength
+
+initial_state:
+  state_machine_mode: DETUMBLING
+  rw_speeds_rpm: [0, 0, 0, 0]
+
+telemetry:
+  interval_ms: 200

@@ -1,0 +1,22 @@
+meta:
+  name: health_check
+  description: >
+    Static standby state for protocol and health-check tests.
+    No dynamics — all values fixed. Use to verify TCTLM round-trips
+    without simulation noise.
+  adcs_model: cubeadcs_gen2
+
+mode: static
+
+static:
+  state_machine_mode: STANDBY
+  quaternion:         [1.0, 0.0, 0.0, 0.0]
+  angular_rate_rps:   [0.0, 0.0, 0.0]
+  rw_speeds_rpm:      [0, 0, 0, 0]
+  mag_ut:             [23.4, -15.2, 42.1]
+
+initial_state:
+  state_machine_mode: STANDBY
+
+telemetry:
+  interval_ms: 500

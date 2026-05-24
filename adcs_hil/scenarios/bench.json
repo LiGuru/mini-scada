@@ -1,0 +1,11 @@
+{
+    "agent_id": "adcs-bench-01",
+    "amqp_url": "amqp://scada:7daa459bb7920d755d40bd85e3a9a11e@vlahovski.info:5672/",
+    "instruments": [
+        {
+            "id": "adcs1",
+            "driver": "cubeadcs_gen2",
+            "scenario": "adcs_hil/scenarios/detumbling.d2s2"
+        }
+    ]
+}

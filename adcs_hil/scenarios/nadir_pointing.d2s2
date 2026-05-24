@@ -1,0 +1,25 @@
+meta:
+  name: nadir_pointing
+  description: >
+    Steady-state nadir pointing with Y-momentum wheel.
+    Low angular rates, reaction wheels spinning for stability.
+  adcs_model: cubeadcs_gen2
+
+mode: physics
+
+physics:
+  initial_quaternion: [1.0, 0.0, 0.0, 0.0]   # aligned with orbit frame
+  initial_omega_rps:  [0.001, 0.001, 0.001]   # near-zero residual rates
+  initial_rw_rpm:     [0, 2800, 0, 0]          # Y-momentum wheel spinning
+  inertia_kg_m2:
+    Ixx: 0.10
+    Iyy: 0.20
+    Izz: 0.15
+  b_field_body_ut: [12.1, 28.4, -31.7]
+
+initial_state:
+  state_machine_mode: Y_WHEEL_MOMENTUM
+  rw_speeds_rpm: [0, 2800, 0, 0]
+
+telemetry:
+  interval_ms: 200

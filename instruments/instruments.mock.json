@@ -1,0 +1,12 @@
+{
+  "agent_id": "bench-01",
+  "amqp_url": "amqp://scada:7daa459bb7920d755d40bd85e3a9a11e@vlahovski.info:5672/",
+  "instruments": [
+    { "id": "psu1",   "driver": "power_supply",      "mock": true, "resource": "MOCK" },
+    { "id": "dmm1",   "driver": "dmm",               "mock": true, "resource": "MOCK" },
+    { "id": "scope1", "driver": "oscilloscope",       "mock": true, "resource": "MOCK" },
+    { "id": "sa1",    "driver": "spectrum_analyzer",  "mock": true, "resource": "MOCK" },
+    { "id": "load1",  "driver": "load",              "mock": true, "resource": "MOCK" },
+    { "id": "rfgen1", "driver": "rf_generator",      "mock": true, "resource": "MOCK" }
+  ]
+}
