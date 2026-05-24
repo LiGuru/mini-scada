@@ -4,9 +4,12 @@ import { getDynInstruments, getModules } from './instruments/configManager.js?v=
 import { initConfigTab, renderConfigLists } from './config-ui.js?v=4';
 import { formatDate }              from './utils/helpers.js?v=2';
 import { initTheme }               from './theme-manager.js?v=1';
+import { initI18n, t, applyI18n } from './i18n.js?v=1';
 
-// Apply persisted theme before first paint
+// Apply theme immediately (sync, no flash)
 initTheme();
+// Load translations (async) — applyI18n() called inside
+initI18n();
 
 const api = window.electronAPI;
 
@@ -426,21 +429,21 @@ function onBrokerStatus(data) {
     if (data.status === 'ok') {
         if (pill)      pill.className      = 'status-pill ok';
         if (led)       led.className       = 'led ok pulse';
-        if (txt)       txt.textContent     = 'BROKER OK';
+        if (txt)       txt.textContent     = t('broker.ok');
         if (alarmItem) alarmItem.className = 'alarm-item ok';
-        if (alarmTxt)  alarmTxt.textContent = `Broker connected · ${data.url || 'amqp://localhost'}`;
+        if (alarmTxt)  alarmTxt.textContent = t('broker.conn_ok', { url: data.url || 'amqp://localhost' });
     } else if (data.status === 'connecting' || data.status === 'reconnecting') {
         if (pill)      pill.className      = 'status-pill dim';
         if (led)       led.className       = 'led dim pulse';
-        if (txt)       txt.textContent     = data.status === 'reconnecting' ? 'RECONNECTING...' : 'CONNECTING...';
+        if (txt)       txt.textContent     = t(data.status === 'reconnecting' ? 'broker.reconnecting' : 'broker.connecting');
         if (alarmItem) alarmItem.className = 'alarm-item dim';
-        if (alarmTxt)  alarmTxt.textContent = data.status === 'reconnecting' ? 'Broker reconnecting...' : 'Broker connecting...';
+        if (alarmTxt)  alarmTxt.textContent = t(data.status === 'reconnecting' ? 'broker.conn_retry' : 'broker.conn_wait');
     } else {
         if (pill)      pill.className      = 'status-pill fault';
         if (led)       led.className       = 'led fault';
-        if (txt)       txt.textContent     = 'BROKER FAULT';
+        if (txt)       txt.textContent     = t('broker.fault');
         if (alarmItem) alarmItem.className = 'alarm-item fault';
-        if (alarmTxt)  alarmTxt.textContent = `Broker error · ${data.message || 'connection failed'}`;
+        if (alarmTxt)  alarmTxt.textContent = t('broker.conn_err', { msg: data.message || 'connection failed' });
     }
 }
 
@@ -631,20 +634,20 @@ function onAuth(data) {
     } else if (data.type === 'authenticated') {
         _setAuth(true, data.operator);
         if (pill) { pill.className = 'operator-pill authed'; }
-        if (nameEl) nameEl.textContent = data.operator?.name ?? 'Authenticated';
+        if (nameEl) nameEl.textContent = data.operator?.name ?? t('auth.tapBadge');
         if (banner) banner.classList.remove('visible');
 
     } else if (data.type === 'deauthenticated') {
         _setAuth(false, null);
         if (pill) { pill.className = 'operator-pill'; }
-        if (nameEl) nameEl.textContent = 'Not authenticated';
+        if (nameEl) nameEl.textContent = t('auth.notAuthed');
         if (authState.readerPresent) {
             if (banner) banner.classList.add('visible');
-            if (bannerTxt) bannerTxt.textContent = 'Tap badge to authenticate';
+            if (bannerTxt) bannerTxt.textContent = t('auth.tapBadge');
         }
 
     } else if (data.type === 'nfc_error') {
-        if (bannerTxt) bannerTxt.textContent = `Auth error: ${data.message}`;
+        if (bannerTxt) bannerTxt.textContent = t('auth.errPrefix') + data.message;
         if (banner) banner.classList.add('visible');
         setTimeout(() => { if (banner) banner.classList.remove('visible'); }, 4000);
     }

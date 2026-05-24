@@ -46,6 +46,33 @@
 }
 .cfg-theme-card.active .cfg-theme-name { color: var(--accent); }
 
+/* ── Language switcher ───────────────────────────── */
+.cfg-lang-grid {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 16px;
+  flex-wrap: wrap;
+}
+
+.cfg-lang-card {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  background: var(--surface2);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dim);
+  transition: border-color 0.15s, color 0.15s;
+  user-select: none;
+}
+.cfg-lang-card:hover { border-color: var(--border2); color: var(--text); }
+.cfg-lang-card.active { border-color: var(--accent); color: var(--accent); }
+.cfg-lang-flag { font-size: 16px; line-height: 1; }
+
 .config-toolbar {
   flex-shrink: 0;
   display: flex;

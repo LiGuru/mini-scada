@@ -12,6 +12,7 @@ import {
     getModules, saveModules, upsertModule, removeModule, resetDefaults,
 } from './instruments/configManager.js?v=2';
 import { THEMES, applyTheme, getTheme } from './theme-manager.js?v=1';
+import { LANGS, setLang, getLang }       from './i18n.js?v=1';
 
 const PALETTE = ['#00c896', '#00bcd4', '#f0a500', '#a78bfa', '#f472b6', '#38bdf8', '#fb923c', '#4ade80'];
 
@@ -357,6 +358,18 @@ function _renderThemeGrid() {
     `).join('');
 }
 
+function _renderLangGrid() {
+    const grid = document.getElementById('cfgLangGrid');
+    if (!grid) return;
+    const current = getLang();
+    grid.innerHTML = LANGS.map(l => `
+        <div class="cfg-lang-card${l.id === current ? ' active' : ''}" data-lang-id="${l.id}">
+            <span class="cfg-lang-flag">${l.flag}</span>
+            <span>${l.label}</span>
+        </div>
+    `).join('');
+}
+
 export function initConfigTab() {
     // Theme grid
     _renderThemeGrid();
@@ -366,6 +379,17 @@ export function initConfigTab() {
         applyTheme(card.dataset.themeId);
         _renderThemeGrid();
     });
+
+    // Language grid
+    _renderLangGrid();
+    document.getElementById('cfgLangGrid')?.addEventListener('click', e => {
+        const card = e.target.closest('.cfg-lang-card');
+        if (!card) return;
+        setLang(card.dataset.langId).then(() => _renderLangGrid());
+    });
+
+    // Re-render lang grid on external lang change
+    document.addEventListener('scada:langchange', () => _renderLangGrid());
 
     // Connection type radio buttons
     document.querySelectorAll('[name="cfgConnType"]').forEach(r => {

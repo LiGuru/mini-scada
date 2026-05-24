@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "live":    "Live View",
+    "trends":  "Trends",
+    "testlog": "Test Log",
+    "config":  "Config"
+  },
+  "broker": {
+    "ok":            "BROKER OK",
+    "connecting":    "CONNECTING...",
+    "reconnecting":  "RECONNECTING...",
+    "fault":         "BROKER FAULT",
+    "conn_ok":       "Broker connected · {url}",
+    "conn_retry":    "Broker reconnecting...",
+    "conn_wait":     "Broker connecting...",
+    "conn_err":      "Broker error · {msg}"
+  },
+  "agent": {
+    "na": "n/a"
+  },
+  "sidebar": {
+    "benches":  "Test Benches",
+    "health":   "Module Health",
+    "queue":    "Task Queue",
+    "waiting":  "Waiting for tasks..."
+  },
+  "modules": {
+    "eps":   "EPS Module",
+    "uhf":   "UHF Module",
+    "obc":   "OBC Module",
+    "adcs":  "ADCS",
+    "sband": "S-BAND",
+    "xband": "X-BAND"
+  },
+  "badge": {
+    "idle":    "IDLE",
+    "running": "RUNNING",
+    "pass":    "PASS",
+    "fail":    "FAIL"
+  },
+  "activeTest": {
+    "title":   "Active Test",
+    "task":    "Current Task",
+    "waiting": "Waiting...",
+    "taskLbl": "Task",
+    "agent":   "Agent",
+    "result":  "Result",
+    "updated": "Updated",
+    "history": "Result History"
+  },
+  "trends": {
+    "title":    "Trends",
+    "subtitle": "Last 120 samples · updates live",
+    "instr":    "Instruments"
+  },
+  "testlog": {
+    "all":     "All",
+    "pass":    "Pass",
+    "fail":    "Fail",
+    "clear":   "Clear",
+    "entries": "{n} entries",
+    "time":    "Time",
+    "task":    "Task",
+    "agent":   "Agent",
+    "cycle":   "Cycle",
+    "result":  "Result",
+    "modules": "Modules"
+  },
+  "config": {
+    "title":      "Configuration",
+    "subtitle":   "Instruments and modules — changes save automatically to browser storage",
+    "reset":      "Reset to defaults",
+    "appearance": "Appearance",
+    "language":   "Language",
+    "instr":      "Dynamic Instruments",
+    "modules":    "Modules",
+    "add":        "+ Add",
+    "resetConfirm": "Reset all instruments and modules to factory defaults?\n\nAll custom entries will be removed. This cannot be undone."
+  },
+  "modal": {
+    "addInstr":    "Add Instrument",
+    "editInstr":   "Edit Instrument",
+    "addMod":      "Add Module",
+    "editMod":     "Edit Module",
+    "keyLbl":      "Data Key",
+    "keyHint":     "(must match the payload key, e.g. rf_generator)",
+    "labelLbl":    "Display Label",
+    "iconLbl":     "Icon",
+    "iconHint":    "(Font Awesome 5 class)",
+    "connLbl":     "Connection",
+    "connNone":    "None",
+    "connIp":      "IP",
+    "connUsb":     "USB",
+    "primaryLbl":  "Primary Field",
+    "primaryHint": "(field key used for the sparkline)",
+    "fieldsLbl":   "Fields",
+    "addField":    "+ Field",
+    "cancel":      "Cancel",
+    "save":        "Save"
+  },
+  "alarm": {
+    "connecting": "Broker connecting...",
+    "noAlarms":   "No active alarms"
+  },
+  "auth": {
+    "noReader":    "No reader",
+    "notAuthed":   "Not authenticated",
+    "tapBadge":    "Tap badge to authenticate",
+    "errPrefix":   "Auth error: "
+  }
+}

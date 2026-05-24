@@ -21,14 +21,17 @@
     <div class="topbar-brand">MINI SCADA <span>v2.0</span></div>
 
     <div class="topbar-nav">
-        <div class="nav-tab active" id="tab-live">Live View</div>
-        <div class="nav-tab" id="tab-trends">Trends</div>
-        <div class="nav-tab" id="tab-testlog">Test Log</div>
-        <div class="nav-tab" id="tab-config">Config</div>
+        <div class="nav-tab active" id="tab-live"    data-i18n="nav.live">Live View</div>
+        <div class="nav-tab"        id="tab-trends"  data-i18n="nav.trends">Trends</div>
+        <div class="nav-tab"        id="tab-testlog" data-i18n="nav.testlog">Test Log</div>
+        <div class="nav-tab"        id="tab-config"  data-i18n="nav.config">Config</div>
     </div>
 
     <div class="topbar-status">
-        <div class="status-pill dim" id="brokerStatusPill"><div class="led dim" id="brokerLed"></div> <span id="brokerStatusText">CONNECTING...</span></div>
+        <div class="status-pill dim" id="brokerStatusPill">
+            <div class="led dim" id="brokerLed"></div>
+            <span id="brokerStatusText" data-i18n="broker.connecting">CONNECTING...</span>
+        </div>
         <div class="status-pill ok" id="agentStatusPill">
             <div class="led dim" id="agentLed"></div>
             <span id="statusAgentId">n/a</span>
@@ -38,7 +41,7 @@
 
     <div class="operator-pill no-reader" id="operatorPill">
         <i class="fas fa-id-badge op-icon"></i>
-        <span id="operatorName">No reader</span>
+        <span id="operatorName" data-i18n="auth.noReader">No reader</span>
     </div>
 
     <div class="topbar-clock" id="topbarClock">--:--:--</div>
@@ -47,7 +50,7 @@
 <!-- ── AUTH BANNER ───────────────────────────────────── -->
 <div class="auth-banner" id="authBanner">
     <i class="fas fa-wifi"></i>
-    <span id="authBannerText">Tap badge to authenticate</span>
+    <span id="authBannerText" data-i18n="auth.tapBadge">Tap badge to authenticate</span>
 </div>
 
 <!-- ── WORKSPACE (Live View) ─────────────────────── -->
@@ -57,7 +60,7 @@
     <div class="sidebar">
 
         <div class="sb-section">
-            <div class="sb-title">Test Benches</div>
+            <div class="sb-title" data-i18n="sidebar.benches">Test Benches</div>
             <div class="agent-row selected">
                 <div class="agent-icon"><i class="fas fa-microchip"></i></div>
                 <div>
@@ -68,47 +71,45 @@
         </div>
 
         <div class="sb-section">
-            <div class="sb-title">Module Health</div>
+            <div class="sb-title" data-i18n="sidebar.health">Module Health</div>
             <div class="mh-row" id="mh-eps">
-                <div class="mh-left"><i class="fas fa-battery-full"></i> EPS Module</div>
-                <div class="badge idle" id="mh-badge-eps">IDLE</div>
+                <div class="mh-left"><i class="fas fa-battery-full"></i> <span data-i18n="modules.eps">EPS Module</span></div>
+                <div class="badge idle" id="mh-badge-eps" data-i18n="badge.idle">IDLE</div>
             </div>
             <div class="mh-row" id="mh-uhf">
-                <div class="mh-left"><i class="fas fa-satellite"></i> UHF Module</div>
-                <div class="badge idle" id="mh-badge-uhf">IDLE</div>
+                <div class="mh-left"><i class="fas fa-satellite"></i> <span data-i18n="modules.uhf">UHF Module</span></div>
+                <div class="badge idle" id="mh-badge-uhf" data-i18n="badge.idle">IDLE</div>
             </div>
             <div class="mh-row" id="mh-obc">
-                <div class="mh-left"><i class="fas fa-microchip"></i> OBC Module</div>
-                <div class="badge idle" id="mh-badge-obc">IDLE</div>
+                <div class="mh-left"><i class="fas fa-microchip"></i> <span data-i18n="modules.obc">OBC Module</span></div>
+                <div class="badge idle" id="mh-badge-obc" data-i18n="badge.idle">IDLE</div>
             </div>
             <div class="mh-row" id="mh-adcs">
-                <div class="mh-left"><i class="fas fa-compass"></i> ADCS</div>
-                <div class="badge idle" id="mh-badge-adcs">IDLE</div>
+                <div class="mh-left"><i class="fas fa-compass"></i> <span data-i18n="modules.adcs">ADCS</span></div>
+                <div class="badge idle" id="mh-badge-adcs" data-i18n="badge.idle">IDLE</div>
             </div>
             <div class="mh-row" id="mh-sband">
-                <div class="mh-left"><i class="fas fa-broadcast-tower"></i> S-BAND</div>
-                <div class="badge idle" id="mh-badge-sband">IDLE</div>
+                <div class="mh-left"><i class="fas fa-broadcast-tower"></i> <span data-i18n="modules.sband">S-BAND</span></div>
+                <div class="badge idle" id="mh-badge-sband" data-i18n="badge.idle">IDLE</div>
             </div>
             <div class="mh-row" id="mh-xband">
-                <div class="mh-left"><i class="fas fa-signal"></i> X-BAND</div>
-                <div class="badge idle" id="mh-badge-xband">IDLE</div>
+                <div class="mh-left"><i class="fas fa-signal"></i> <span data-i18n="modules.xband">X-BAND</span></div>
+                <div class="badge idle" id="mh-badge-xband" data-i18n="badge.idle">IDLE</div>
             </div>
         </div>
 
         <div class="sb-section">
-            <div class="sb-title">Task Queue</div>
-            <!-- Current running task -->
+            <div class="sb-title" data-i18n="sidebar.queue">Task Queue</div>
             <div class="tq-row" id="tqCurrentRow">
                 <div class="tq-header">
                     <span class="tq-id" id="tqCurrentId">—</span>
-                    <div class="badge running" id="tqCurrentBadge" style="display:none">RUNNING</div>
+                    <div class="badge running" id="tqCurrentBadge" style="display:none" data-i18n="badge.running">RUNNING</div>
                 </div>
-                <div class="tq-meta" id="tqCurrentMeta">Waiting for tasks...</div>
+                <div class="tq-meta" id="tqCurrentMeta" data-i18n="sidebar.waiting">Waiting for tasks...</div>
                 <div class="tq-bar" id="tqProgressWrap" style="display:none">
                     <div class="tq-fill running" id="tqProgressFill" style="width:0%"></div>
                 </div>
             </div>
-            <!-- Completed task history -->
             <div id="tqHistory"></div>
         </div>
 
@@ -116,31 +117,26 @@
 
     <!-- ── CENTER PANEL ──────────────────────── -->
     <div class="center-panel">
-
-        <!-- All instrument faceplates (fixed + dynamic, auto-created from config) -->
         <div class="faceplate-row faceplate-row-dyn" id="dynInstrumentsRow"></div>
-
-        <!-- Module tiles (dynamically rendered) -->
         <div class="module-grid" id="modulesContainer">
             <div class="module-placeholder">
                 <i class="fas fa-satellite-dish"></i>
-                <p>Waiting for data...</p>
+                <p data-i18n="sidebar.waiting">Waiting for data...</p>
             </div>
         </div>
-
     </div>
 
     <!-- ── RIGHT PANEL ───────────────────────── -->
     <div class="right-panel">
 
         <div class="panel-header">
-            Active Test
-            <div class="badge running" id="activeTestBadge" style="display:none">RUNNING</div>
+            <span data-i18n="activeTest.title">Active Test</span>
+            <div class="badge running" id="activeTestBadge" style="display:none" data-i18n="badge.running">RUNNING</div>
         </div>
 
         <div class="active-test-card">
-            <div class="at-label">Current Task</div>
-            <div class="at-name" id="activeScenario">Waiting...</div>
+            <div class="at-label" data-i18n="activeTest.task">Current Task</div>
+            <div class="at-name" id="activeScenario" data-i18n="activeTest.waiting">Waiting...</div>
             <div class="cycle-display">
                 <div class="cycle-num" id="cycleNumber">—</div>
                 <div class="cycle-denom" id="cycleDenom"></div>
@@ -149,20 +145,18 @@
                 <div class="cycle-fill" id="cycleFill" style="width:0%"></div>
             </div>
             <div class="at-meta">
-                <div class="at-meta-row"><span>Task</span><b id="taskId">—</b></div>
-                <div class="at-meta-row"><span>Agent</span><b id="agentId">—</b></div>
-                <div class="at-meta-row"><span>Result</span><b id="result">—</b></div>
-                <div class="at-meta-row"><span>Updated</span><b id="statusTimestamp">—</b></div>
+                <div class="at-meta-row"><span data-i18n="activeTest.taskLbl">Task</span><b id="taskId">—</b></div>
+                <div class="at-meta-row"><span data-i18n="activeTest.agent">Agent</span><b id="agentId">—</b></div>
+                <div class="at-meta-row"><span data-i18n="activeTest.result">Result</span><b id="result">—</b></div>
+                <div class="at-meta-row"><span data-i18n="activeTest.updated">Updated</span><b id="statusTimestamp">—</b></div>
             </div>
         </div>
 
         <div class="panel-header" style="border-top:1px solid var(--border)">
-            Result History
+            <span data-i18n="activeTest.history">Result History</span>
         </div>
 
-        <div class="result-list" id="resultHistory">
-            <!-- filled by renderer.js -->
-        </div>
+        <div class="result-list" id="resultHistory"></div>
 
     </div>
 </div>
@@ -170,20 +164,15 @@
 <!-- ── TRENDS VIEW ────────────────────────────────── -->
 <div class="view-panel" id="view-trends" style="display:none">
     <div class="trends-toolbar">
-        <strong>Trends</strong>
-        <span>Last 120 samples · updates live</span>
+        <strong data-i18n="trends.title">Trends</strong>
+        <span data-i18n="trends.subtitle">Last 120 samples · updates live</span>
         <span style="margin-left:auto" id="trendsLastUpdate">—</span>
     </div>
     <div class="trends-body" id="trendsBody">
-
-        <div class="trend-section-label">Instruments</div>
-
-        <!-- All instrument trend cards (fixed + dynamic) injected here -->
+        <div class="trend-section-label" data-i18n="trends.instr">Instruments</div>
         <div id="trends-dyn-instrument-cards" style="display:contents"></div>
-
         <div class="trend-section-label" id="trends-module-label" style="display:none">Modules</div>
         <div id="trends-module-cards" style="display:contents"></div>
-
     </div>
 </div>
 
@@ -191,21 +180,21 @@
 <div class="view-panel" id="view-testlog" style="display:none">
     <div class="testlog-toolbar">
         <div class="tl-filter-group">
-            <button class="tl-filter-btn active" data-filter="all">All</button>
-            <button class="tl-filter-btn" data-filter="pass">Pass</button>
-            <button class="tl-filter-btn" data-filter="fail">Fail</button>
+            <button class="tl-filter-btn active" data-filter="all" data-i18n="testlog.all">All</button>
+            <button class="tl-filter-btn" data-filter="pass" data-i18n="testlog.pass">Pass</button>
+            <button class="tl-filter-btn" data-filter="fail" data-i18n="testlog.fail">Fail</button>
         </div>
         <span class="testlog-count" id="testlogCount">0 entries</span>
-        <button class="tl-clear-btn" id="testlogClear">Clear</button>
+        <button class="tl-clear-btn" id="testlogClear" data-i18n="testlog.clear">Clear</button>
     </div>
     <div class="testlog-table">
         <div class="testlog-head">
-            <span>Time</span>
-            <span>Task</span>
-            <span>Agent</span>
-            <span>Cycle</span>
-            <span>Result</span>
-            <span>Modules</span>
+            <span data-i18n="testlog.time">Time</span>
+            <span data-i18n="testlog.task">Task</span>
+            <span data-i18n="testlog.agent">Agent</span>
+            <span data-i18n="testlog.cycle">Cycle</span>
+            <span data-i18n="testlog.result">Result</span>
+            <span data-i18n="testlog.modules">Modules</span>
         </div>
         <div class="testlog-body" id="testlogBody"></div>
     </div>
@@ -214,29 +203,34 @@
 <!-- ── CONFIG VIEW ───────────────────────────────────── -->
 <div class="view-panel" id="view-config" style="display:none">
     <div class="config-toolbar">
-        <strong>Configuration</strong>
-        <span>Instruments and modules — changes save automatically to browser storage</span>
-        <button id="cfgResetBtn">Reset to defaults</button>
+        <strong data-i18n="config.title">Configuration</strong>
+        <span data-i18n="config.subtitle">Instruments and modules — changes save automatically to browser storage</span>
+        <button id="cfgResetBtn" data-i18n="config.reset">Reset to defaults</button>
     </div>
     <div class="config-body">
 
         <div class="cfg-section">
-            <div class="cfg-section-header"><span>Appearance</span></div>
+            <div class="cfg-section-header"><span data-i18n="config.appearance">Appearance</span></div>
             <div class="cfg-theme-grid" id="cfgThemeGrid"></div>
         </div>
 
         <div class="cfg-section">
+            <div class="cfg-section-header"><span data-i18n="config.language">Language</span></div>
+            <div class="cfg-lang-grid" id="cfgLangGrid"></div>
+        </div>
+
+        <div class="cfg-section">
             <div class="cfg-section-header">
-                <span>Dynamic Instruments</span>
-                <button class="cfg-add-btn" id="cfgAddInstrBtn">+ Add</button>
+                <span data-i18n="config.instr">Dynamic Instruments</span>
+                <button class="cfg-add-btn" id="cfgAddInstrBtn" data-i18n="config.add">+ Add</button>
             </div>
             <div class="cfg-list" id="cfgInstrList"></div>
         </div>
 
         <div class="cfg-section">
             <div class="cfg-section-header">
-                <span>Modules</span>
-                <button class="cfg-add-btn" id="cfgAddModBtn">+ Add</button>
+                <span data-i18n="config.modules">Modules</span>
+                <button class="cfg-add-btn" id="cfgAddModBtn" data-i18n="config.add">+ Add</button>
             </div>
             <div class="cfg-list" id="cfgModList"></div>
         </div>
@@ -253,36 +247,36 @@
         </div>
         <div class="cfg-modal-body">
             <div class="cfg-form-group">
-                <label>Data Key <span style="color:var(--dim);font-weight:400;text-transform:none">(must match the key in the payload, e.g. rf_generator)</span></label>
-                <input type="text" id="cfgKey" placeholder="e.g. rf_generator">
+                <label data-i18n="modal.keyLbl">Data Key <span style="color:var(--dim);font-weight:400;text-transform:none" data-i18n="modal.keyHint"></span></label>
+                <input type="text" id="cfgKey" data-i18n-placeholder="modal.keyLbl" placeholder="e.g. rf_generator">
             </div>
             <div class="cfg-form-group">
-                <label>Display Label</label>
+                <label data-i18n="modal.labelLbl">Display Label</label>
                 <input type="text" id="cfgLabel" placeholder="e.g. RF Generator">
             </div>
             <div class="cfg-form-group">
-                <label>Icon <span style="color:var(--dim);font-weight:400;text-transform:none">(Font Awesome 5 class)</span></label>
+                <label data-i18n="modal.iconLbl">Icon <span style="color:var(--dim);font-weight:400;text-transform:none" data-i18n="modal.iconHint"></span></label>
                 <input type="text" id="cfgIcon" placeholder="fas fa-gauge">
             </div>
             <div class="cfg-conn-section" id="cfgConnGroup">
                 <div class="cfg-conn-header">
-                    <span>Connection</span>
+                    <span data-i18n="modal.connLbl">Connection</span>
                     <div class="cfg-conn-radios">
-                        <label class="cfg-conn-opt"><input type="radio" name="cfgConnType" value="none"> None</label>
-                        <label class="cfg-conn-opt"><input type="radio" name="cfgConnType" value="ip"> IP</label>
-                        <label class="cfg-conn-opt"><input type="radio" name="cfgConnType" value="usb"> USB</label>
+                        <label class="cfg-conn-opt"><input type="radio" name="cfgConnType" value="none"> <span data-i18n="modal.connNone">None</span></label>
+                        <label class="cfg-conn-opt"><input type="radio" name="cfgConnType" value="ip"> <span data-i18n="modal.connIp">IP</span></label>
+                        <label class="cfg-conn-opt"><input type="radio" name="cfgConnType" value="usb"> <span data-i18n="modal.connUsb">USB</span></label>
                     </div>
                 </div>
                 <input type="text" id="cfgConnIp"  class="cfg-conn-input" placeholder="192.168.1.100" style="display:none">
                 <input type="text" id="cfgConnUsb" class="cfg-conn-input" placeholder="USB0::0x0957::0x0B0B::MY12345678::INSTR" style="display:none">
             </div>
             <div class="cfg-form-group" id="cfgPrimaryKeyGroup">
-                <label>Primary Field <span style="color:var(--dim);font-weight:400;text-transform:none">(field key used for the sparkline)</span></label>
+                <label data-i18n="modal.primaryLbl">Primary Field <span style="color:var(--dim);font-weight:400;text-transform:none" data-i18n="modal.primaryHint"></span></label>
                 <input type="text" id="cfgPrimaryKey" placeholder="e.g. frequency">
             </div>
             <div class="cfg-fields-header">
-                <span>Fields</span>
-                <button id="cfgAddField">+ Field</button>
+                <span data-i18n="modal.fieldsLbl">Fields</span>
+                <button id="cfgAddField" data-i18n="modal.addField">+ Field</button>
             </div>
             <div class="cfg-fields-table-head">
                 <span>Key</span><span>Label</span><span>Unit</span><span>Dec</span><span>DT</span><span>Chart</span><span>Color</span><span></span>
@@ -290,18 +284,18 @@
             <div id="cfgFieldsList"></div>
         </div>
         <div class="cfg-modal-footer">
-            <button id="cfgModalCancel">Cancel</button>
-            <button id="cfgModalSave" class="btn-primary">Save</button>
+            <button id="cfgModalCancel" data-i18n="modal.cancel">Cancel</button>
+            <button id="cfgModalSave" class="btn-primary" data-i18n="modal.save">Save</button>
         </div>
     </div>
 </div>
 
 <!-- ── ALARM BAR ─────────────────────────────────── -->
 <div class="alarmbar" id="alarmbar">
-    <div class="alarm-item dim" id="alarmBroker"><i class="fas fa-circle"></i> <span id="alarmBrokerText">Broker connecting...</span></div>
-    <div class="alarm-item dim" id="alarmNoFaults"><i class="fas fa-check-circle"></i> No active alarms</div>
+    <div class="alarm-item dim" id="alarmBroker"><i class="fas fa-circle"></i> <span id="alarmBrokerText" data-i18n="alarm.connecting">Broker connecting...</span></div>
+    <div class="alarm-item dim" id="alarmNoFaults"><i class="fas fa-check-circle"></i> <span data-i18n="alarm.noAlarms">No active alarms</span></div>
 </div>
 
-<script type="module" src="renderer.js?v=13"></script>
+<script type="module" src="renderer.js?v=14"></script>
 </body>
 </html>
